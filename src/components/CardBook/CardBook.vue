@@ -1,0 +1,55 @@
+
+
+<script setup>
+import { IconStar, IconStarFilled } from "@tabler/icons-vue";
+
+const props = defineProps({
+  name: String,
+  price: String,
+  url: String,
+});
+</script>
+
+<template>
+  <div class="cardBook rounded">
+    <div class="cardImage text-center">
+      <img
+        :src="props.url"
+        alt="notFound"
+        height="150"
+        width="100"
+        class="object-fit-cover"
+      />
+    </div>
+    <div class="text-center   border-top cardBody">
+      <div class="text-ellipsis text-truncate overflow-hidden">
+        {{ props.name }}
+      </div>
+      <div class="red">${{ props.price }}</div>
+      <div class="d-flex justify-content-between w-75 m-auto">
+        <IconStar :style="{ height: '15px', width: '15px', color: 'yellow' }" />
+        <IconStar :style="{ height: '15px', width: '15px', color: 'yellow' }" />
+        <IconStar :style="{ height: '15px', width: '15px', color: 'yellow' }" />
+        <IconStar :style="{ height: '15px', width: '15px', color: 'yellow' }" />
+        <IconStar :style="{ height: '15px', width: '15px', color: 'yellow' }" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+/* #eeeeee */
+.cardBook {
+  width: 170px;
+  border: 1px solid rgb(224, 217, 217);
+  margin: 10px 0;
+}
+.cardImage {
+  padding: 10px;
+  background-color: #eeeeee;
+}
+
+.cardBody {
+  padding: 10px;
+}
+</style>
