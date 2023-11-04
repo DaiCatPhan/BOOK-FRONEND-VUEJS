@@ -2,12 +2,15 @@
 
 <script setup>
 import { IconStar, IconStarFilled } from "@tabler/icons-vue";
+import { ref } from "vue";
 
 const props = defineProps({
   name: String,
   price: String,
   url: String,
 });
+
+const value = ref(4);
 </script>
 
 <template>
@@ -21,17 +24,13 @@ const props = defineProps({
         class="object-fit-cover"
       />
     </div>
-    <div class="text-center   border-top cardBody">
+    <div class="text-center border-top cardBody">
       <div class="text-ellipsis text-truncate overflow-hidden">
         {{ props.name }}
       </div>
       <div class="red">${{ props.price }}</div>
       <div class="d-flex justify-content-between w-75 m-auto">
-        <IconStar :style="{ height: '15px', width: '15px', color: 'yellow' }" />
-        <IconStar :style="{ height: '15px', width: '15px', color: 'yellow' }" />
-        <IconStar :style="{ height: '15px', width: '15px', color: 'yellow' }" />
-        <IconStar :style="{ height: '15px', width: '15px', color: 'yellow' }" />
-        <IconStar :style="{ height: '15px', width: '15px', color: 'yellow' }" />
+        <a-rate :value="value" :style="{ 'font-size': '14px' }" />
       </div>
     </div>
   </div>

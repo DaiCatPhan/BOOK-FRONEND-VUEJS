@@ -10,6 +10,11 @@ import Dashboard from "../views/admin/Dashboard/Dashboard.vue";
 
 // !ADMIN
 import Home from "../views/resources/Home/Home.vue";
+import Book from "../views/resources/Book/Book.vue";
+import BookDetail from "../views/resources/BookDetail/BookDetail.vue";
+import Cart from "../views/customer/Cart/Cart.vue";
+import Profile from "../views/customer/Profile/Profile.vue";
+import History from "../views/customer/History/History.vue";
 
 const routes = [
   // ADMIN
@@ -34,7 +39,42 @@ const routes = [
       layout: AdminLayout,
     },
   },
-  // !ADMIN
+  // !ADMIN =====================================================================
+  {
+    path: "/history",
+    component: History,
+    meta: {
+      layout: DefaultLayout,
+    },
+  },
+  {
+    path: "/profile",
+    component: Profile,
+    meta: {
+      layout: DefaultLayout,
+    },
+  },
+  {
+    path: "/order",
+    component: Cart,
+    meta: {
+      layout: DefaultLayout,
+    },
+  },
+  {
+    path: "/books/:id",
+    component: BookDetail,
+    meta: {
+      layout: DefaultLayout,
+    },
+  },
+  {
+    path: "/books",
+    component: Book,
+    meta: {
+      layout: DefaultLayout,
+    },
+  },
   {
     path: "/",
     component: Home,
