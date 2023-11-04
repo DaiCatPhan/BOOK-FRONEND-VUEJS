@@ -1,9 +1,8 @@
 
 
-<script>
-export default {
-  name: "App",
-};
+<script setup>
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 </script>
 
 <template>
@@ -11,9 +10,6 @@ export default {
     <component :is="$route.meta.layout">
       <router-view />
     </component>
-
-    <!-- <div><router-link to="/">Den trang Home</router-link></div>
-    <router-link to="/users">Den trang User</router-link> -->
   </div>
 </template>
 

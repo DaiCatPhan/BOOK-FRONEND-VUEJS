@@ -43,7 +43,39 @@
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="background: #fff; padding: 0" />
+      <a-layout-header style="background: #fff; padding: 0">
+        <div class="d-flex justify-content-between mx-5">
+          <div></div>
+          <div>
+            <a-dropdown-button>
+              Tài khoản
+              <template #overlay>
+                <a-menu @click="handleMenuClick">
+                  <a-menu-item key="1">
+                    <UserOutlined />
+                    Hồ sơ của tôi
+                  </a-menu-item>
+                  <a-menu-item key="2">
+                    <UserOutlined />
+                    Giỏ hàng của tôi
+                  </a-menu-item>
+                  <a-menu-item key="3">
+                    <UserOutlined />
+                    Lịch sử mua hàng
+                  </a-menu-item>
+                  <a-menu-item key="4">
+                    <UserOutlined />
+                    Log out
+                  </a-menu-item>
+                </a-menu>
+              </template>
+              <template #icon
+                ><IconUserSquareRounded style="margin-bottom: 3px"
+              /></template>
+            </a-dropdown-button>
+          </div>
+        </div>
+      </a-layout-header>
       <a-layout-content style="margin: 0 16px">
         <a-breadcrumb style="margin: 16px 0">
           <a-breadcrumb-item>Admin</a-breadcrumb-item>
@@ -61,6 +93,7 @@
   </a-layout>
 </template>
 <script setup>
+import { IconUserSquareRounded } from "@tabler/icons-vue";
 import { ref } from "vue";
 const collapsed = ref(false);
 const selectedKeys = ref(["1"]);
