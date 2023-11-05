@@ -2,13 +2,30 @@
 <script setup>
 import { IconRotateClockwise, IconTrash } from "@tabler/icons-vue";
 import { IconEdit } from "@tabler/icons-vue";
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
+import { computed } from "vue";
+import axios from "axios";
 
 import ModalAddBook from "../components/ModalAddBook/ModalAddBook.vue";
+
+import Service from "../../../../service/api";
 
 const isShowModalAdd = ref(false);
 const isShowModalUpdate = ref(false);
 const isShowModalDelete = ref(false);
+
+const listBook = ref([]);
+const current = ref(1);
+const pageSize = ref(5);
+const total = ref(0);
+
+const pagination = computed(() => ({
+  current: current.value,
+  pageSize: pageSize.value,
+  total: total.value,
+  showSizeChanger: true,
+  pageSizeOptions: ["5", "10", "15"],
+}));
 
 // MODAL UPDATE BOOK
 const handleUpdate = async (data) => {
@@ -29,47 +46,74 @@ const closeModalAdd = () => {
   isShowModalAdd.value = false;
 };
 
-// REFETCH DATA
+// REFETCH DATA ICON
 const handleRefetch = async () => {
   alert("handleRefetch");
 };
 
-const dataSource = [
-  {
-    key: "1",
-    name: "Mike",
-    age: 32,
-    address: "10 Downing Street",
-  },
-  {
-    key: "2",
-    name: "John",
-    age: 42,
-    address: "10 Downing Street",
-  },
-];
+// TABLE
 
 const columns = [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
+    title: "_id",
+    dataIndex: "_id",
+    key: "_id",
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
+    title: "TenHH",
+    dataIndex: "TenHH",
+    key: "TenHH",
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
+    title: "Gia",
+    dataIndex: "Gia",
+    key: "Gia",
   },
+  {
+    title: "TheLoai",
+    dataIndex: "TheLoai",
+    key: "TheLoai",
+  },
+
   {
     title: "Action",
     key: "action",
   },
 ];
+
+const handleTableChange = (data) => {
+  console.log("data", data);
+  if (data) {
+    current.value = data.current;
+    pageSize.value = data.pageSize;
+    total.value = data.total;
+  }
+};
+
+// Xử lí Gọi API và phân trang
+
+const fetchData = async () => {
+  const data = await Service.readPanigate_HANG_HOA(
+    `?page=${+current.value}&limit=${+pageSize.value}`
+  );
+
+  if (data && data.data.EC === 0 && data.data.DT.pagination.length > 0) {
+    listBook.value = data.data.DT.pagination;
+    total.value = data.data.DT?.meta?.total;
+  }
+};
+onMounted(() => {
+  fetchData();
+});
+
+watch(
+  [current, pageSize],
+  () => {
+    console.log("fetlaiData");
+    fetchData();
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -86,7 +130,13 @@ const columns = [
         />
       </div>
     </div>
-    <a-table :dataSource="dataSource" :columns="columns" bordered>
+    <a-table
+      :dataSource="listBook"
+      :columns="columns"
+      bordered
+      :pagination="pagination"
+      @change="handleTableChange"
+    >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <div class="d-flex border">

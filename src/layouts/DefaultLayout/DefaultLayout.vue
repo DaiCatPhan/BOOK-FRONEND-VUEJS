@@ -4,12 +4,13 @@
     <div>
       <slot></slot>
     </div>
-    <h1>Footer Default Layout</h1>
+    <Footer />
   </div>
 </template>
 
 <script setup>
 import Header from "../componentLayouts/Header/Header.vue";
+import Footer from "../componentLayouts/Footer/Footer.vue";
 </script>
 
 <style>

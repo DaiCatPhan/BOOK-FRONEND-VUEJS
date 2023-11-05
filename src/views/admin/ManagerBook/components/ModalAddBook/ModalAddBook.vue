@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { Upload } from "ant-design-vue";
+import { InputNumber, Upload } from "ant-design-vue";
 import ServiceApi from "../../../../../service/api.js";
 import { toast } from "vue3-toastify";
 import axios from "axios";
@@ -49,6 +49,17 @@ const handleClose = () => {
 const handleOk = async () => {
   // Gọi API create Book
 
+  console.log(
+    TenHH.value,
+    MoTaHH.value,
+    Gia.value,
+    SoLuongHang.value,
+    GhiChu.value,
+    TheLoai.value,
+    TacGia.value,
+    HinhHH.value
+  );
+
   try {
     const formData = new FormData();
     formData.append("TenHH", TenHH.value);
@@ -95,8 +106,17 @@ const handleOk = async () => {
         </div>
         <div class="mb-3 row">
           <div class="col-6">
-            <label class="form-label">Giá ( ex : 150.000)</label>
-            <input v-model="Gia" type="text" class="form-control" />
+            <label class="form-label">Giá </label>
+            <!-- <input v-model="Gia" type="text" class="form-control" /> -->
+
+            <a-input-number
+              class="w-100"
+              v-model:value="Gia"
+              :formatter="
+                (value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              "
+              :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+            />
           </div>
           <div class="col-6">
             <label class="form-label">Thể loại</label>
@@ -104,13 +124,15 @@ const handleOk = async () => {
             <a-select
               ref="select"
               style="width: 220px"
+              v-model="TheLoai"
+              :value="TheLoai"
               @change="handleChangeSelectType"
             >
               <a-select-option value="kinh tế">Kinh tế</a-select-option>
-              <a-select-option value="sức khỏe">Sức khỏe</a-select-option>
-              <a-select-option value="sức khỏe">Sức khỏe</a-select-option>
-              <a-select-option value="sức khỏe">Sức khỏe</a-select-option>
-              <a-select-option value="sức khỏe">Sức khỏe</a-select-option>
+              <a-select-option value="tôn giáo">Tôn giáo</a-select-option>
+              <a-select-option value="tiểu thuyết">Tiểu thuyết</a-select-option>
+              <a-select-option value="truyện ngắn">Truyện ngắn</a-select-option>
+              <a-select-option value="truyện cười">Truyện cười</a-select-option>
               <a-select-option value="sức khỏe">Sức khỏe</a-select-option>
             </a-select>
           </div>
@@ -130,6 +152,7 @@ const handleOk = async () => {
               @change="handleChangeImage"
               list-type="picture-card"
               :max-count="1"
+              :value="HinhHH"
             >
               <div>
                 <div class="ant-upload-text">Upload</div>
@@ -140,7 +163,8 @@ const handleOk = async () => {
             <label class="form-label">Tác giả</label>
             <input v-model="TacGia" type="text" class="form-control" />
             <label class="form-label">Số lượng sách</label>
-            <input v-model="SoLuongHang" type="text" class="form-control" />
+            <!-- <input v-model="SoLuongHang" type="text" class="form-control" /> -->
+            <InputNumber class="w-100" v-model:value="SoLuongHang" />
           </div>
         </div>
 

@@ -15,6 +15,7 @@ import BookDetail from "../views/resources/BookDetail/BookDetail.vue";
 import Cart from "../views/customer/Cart/Cart.vue";
 import Profile from "../views/customer/Profile/Profile.vue";
 import History from "../views/customer/History/History.vue";
+import Contact from "../views/resources/Contact/Contact.vue";
 
 const routes = [
   // ADMIN
@@ -40,6 +41,13 @@ const routes = [
     },
   },
   // !ADMIN =====================================================================
+  {
+    path: "/lienhe",
+    component: Contact,
+    meta: {
+      layout: DefaultLayout,
+    },
+  },
   {
     path: "/history",
     component: History,
