@@ -1,61 +1,53 @@
 <script setup>
-import { ref } from "vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import CardBook from "../../../components/CardBook/CardBook.vue";
+import Service from "../../../service/api";
+import { Pagination } from "ant-design-vue";
 
 const activeKey = ref("1");
-const type = ref("");
 const sort = ref("");
+const type = ref("");
 
-const books = [
-  {
-    id: 1,
-    name: "Chiến tranh tiền tệ 1 Chiến tranh tiền tệ 1",
-    price: "30.00",
-    url: "https://bizweb.dktcdn.net/100/180/408/products/chien-tranh-tien-te-1-c0c72970-7152-44f1-b27f-10e698f2acff.jpg?v=1667607754867",
-  },
-  {
-    id: 2,
-    name: "Chiến tranh tiền tệ 2",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 3,
-    name: "Chiến tranh tiền tệ 4",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 4,
-    name: "Chiến tranh tiền tệ 5",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 4,
-    name: "Chiến tranh tiền tệ 5",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 4,
-    name: "Chiến tranh tiền tệ 5",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 4,
-    name: "Chiến tranh tiền tệ 5",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 4,
-    name: "Chiến tranh tiền tệ 5",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-];
+// Xử lí pagination
+const books = ref([]);
+const current = ref(1);
+const pageSize = ref(5);
+const total = ref(20);
+
+const onChangePagination = (page, pageSize) => {
+  current.value = +page;
+};
+
+const handlePageSize = (page, newSize) => {
+  pageSize.value = newSize;
+};
+
+// Gọi API lấy datas
+
+const queryApi = computed(() => {
+  if (sort.value) {
+    return `?page=${+current.value}&limit=${+pageSize.value}&type=&sort=${
+      sort.value
+    }`;
+  }
+  return `?page=${+current.value}&limit=${+pageSize.value}`;
+});
+
+const fetchData = async () => {
+  const data = await Service.readPanigate_HANG_HOA(queryApi.value);
+
+  if (data && data.data.EC === 0 && data.data.DT.pagination.length > 0) {
+    books.value = data.data.DT.pagination;
+    total.value = data.data.DT?.meta?.total;
+  }
+};
+
+watchEffect(() => {
+  fetchData();
+});
+watch([current, pageSize, queryApi], () => {
+  fetchData();
+});
 
 const caterory = ref([
   {
@@ -81,11 +73,14 @@ const caterory = ref([
 ]);
 
 const handleSelectType = (data) => {
+  console.log("type", data);
   type.value = data;
 };
 
 const handleTabChange = (key) => {
+  console.log("handleTabChange", key);
   sort.value = key;
+  queryApi.value = `?page=${+current.value}&limit=${+pageSize.value}&sort=${key}`;
 };
 </script>
 
@@ -112,8 +107,8 @@ const handleTabChange = (key) => {
             <a-tabs v-model="activeKey" @change="handleTabChange">
               <a-tab-pane key="" tab="Tất cả"> </a-tab-pane>
               <a-tab-pane key="createdAt" tab="Hàng mới"> </a-tab-pane>
-              <a-tab-pane key="-price" tab="Giá cao đến thấp"> </a-tab-pane>
-              <a-tab-pane key="price" tab="Giá thấp đến cao"> </a-tab-pane>
+              <a-tab-pane key="-Gia" tab="Giá cao đến thấp"> </a-tab-pane>
+              <a-tab-pane key="Gia" tab="Giá thấp đến cao"> </a-tab-pane>
             </a-tabs>
           </div>
 
@@ -124,22 +119,31 @@ const handleTabChange = (key) => {
                 v-for="book in books"
                 :key="book.id"
               >
-                <router-link :to="'/books/' + book.id">
+                <router-link :to="'/books/' + book?._id">
                   <CardBook
                     class="m-auto"
-                    :name="book.name"
-                    :price="book.price"
-                    :url="book.url"
+                    :name="book.TenHH"
+                    :price="book.Gia"
+                    :url="book.HinhHH"
                   />
                 </router-link>
               </div>
+            </div>
+            <div class="text-center">
+              <Pagination
+                :current="current"
+                :pageSize="pageSize"
+                :total="total"
+                :show-size-changer="true"
+                :pageSizeOptions="['5', '10', '15']"
+                @change="onChangePagination"
+                @showSizeChange="handlePageSize"
+              />
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    
   </div>
 </template>
 

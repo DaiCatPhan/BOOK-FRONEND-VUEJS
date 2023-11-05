@@ -50,23 +50,11 @@
             <a-dropdown-button>
               Tài khoản
               <template #overlay>
-                <a-menu @click="handleMenuClick">
-                  <a-menu-item key="1">
-                    <UserOutlined />
-                    Hồ sơ của tôi
-                  </a-menu-item>
-                  <a-menu-item key="2">
-                    <UserOutlined />
-                    Giỏ hàng của tôi
-                  </a-menu-item>
-                  <a-menu-item key="3">
-                    <UserOutlined />
-                    Lịch sử mua hàng
-                  </a-menu-item>
-                  <a-menu-item key="4">
-                    <UserOutlined />
-                    Log out
-                  </a-menu-item>
+                <a-menu>
+                  <a-menu-item key="1"> Hồ sơ của tôi </a-menu-item>
+                  <a-menu-item key="2"> Giỏ hàng của tôi </a-menu-item>
+                  <a-menu-item key="3"> Lịch sử mua hàng </a-menu-item>
+                  <a-menu-item key="4"> Log out </a-menu-item>
                 </a-menu>
               </template>
               <template #icon

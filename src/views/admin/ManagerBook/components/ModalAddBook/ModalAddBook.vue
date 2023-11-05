@@ -152,7 +152,6 @@ const handleOk = async () => {
               @change="handleChangeImage"
               list-type="picture-card"
               :max-count="1"
-              :value="HinhHH"
             >
               <div>
                 <div class="ant-upload-text">Upload</div>

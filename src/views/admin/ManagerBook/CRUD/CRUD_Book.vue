@@ -7,11 +7,13 @@ import { computed } from "vue";
 import axios from "axios";
 
 import ModalAddBook from "../components/ModalAddBook/ModalAddBook.vue";
+import ModalUpdateBook from "../components/ModalUpdateBook/ModalUpdateBook.vue";
 
 import Service from "../../../../service/api";
 
 const isShowModalAdd = ref(false);
 const isShowModalUpdate = ref(false);
+const dataModalUpdate = ref({});
 const isShowModalDelete = ref(false);
 
 const listBook = ref([]);
@@ -29,18 +31,21 @@ const pagination = computed(() => ({
 
 // MODAL UPDATE BOOK
 const handleUpdate = async (data) => {
-  alert("handleUpdate");
+  isShowModalUpdate.value = true;
+  dataModalUpdate.value = data;
+};
+const closeModalUpdate = () => {
+  isShowModalUpdate.value = false;
 };
 
 // MODAL DELETE BOOK
 const handleDelete = async (data) => {
-  alert("handleDelete");
+  isShowModalDelete.value = true;
 };
 
 // MODAL ADD BOOK
 const handleAddBook = async () => {
   isShowModalAdd.value = true;
-  console.log("isShowModalAdd", isShowModalAdd.value);
 };
 const closeModalAdd = () => {
   isShowModalAdd.value = false;
@@ -109,7 +114,6 @@ onMounted(() => {
 watch(
   [current, pageSize],
   () => {
-    console.log("fetlaiData");
     fetchData();
   },
   { immediate: true }
@@ -160,6 +164,12 @@ watch(
     <ModalAddBook
       :isShowModalAdd="isShowModalAdd"
       :closeModalAdd="closeModalAdd"
+    />
+
+    <ModalUpdateBook
+      :isShowModalUpdate="isShowModalUpdate"
+      :closeModalUpdate="closeModalUpdate"
+      :dataModalUpdate="dataModalUpdate.value"
     />
   </div>
 </template>
