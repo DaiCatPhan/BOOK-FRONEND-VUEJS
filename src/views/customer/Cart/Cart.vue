@@ -1,39 +1,50 @@
 <script setup>
 import { IconMoodSmileBeam } from "@tabler/icons-vue";
 import { IconTrash } from "@tabler/icons-vue";
-import { ref, watch, watchEffect } from "vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { reactive } from "vue";
 import { string } from "vue-types";
+
+const currentStep = ref(0);
+const cart = ref([]);
 
 function getCart() {
   return JSON.parse(localStorage.getItem("cart")) || [];
 }
 
-// Xóa giỏ hàng
-function clearCart() {
-  localStorage.removeItem("cart");
-}
+const deleteItemCart = (idBook) => {
+  // Lấy giỏ hàng từ localStorage
+  const cartFromLocalStorage = getCart();
 
-const currentStep = ref(0);
-const cart = ref([]);
-const totalPrice = ref(0);
+  // Lọc ra các mục mà bạn muốn giữ lại
+  const updatedCart = cartFromLocalStorage.filter(
+    (item) => item._id !== idBook
+  );
 
-watchEffect(() => {
+  // Cập nhật giỏ hàng trong localStorage
+  localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+  // Cập nhật giỏ hàng bằng giá trị mới
+  cart.value = updatedCart;
+};
+
+onMounted(() => {
   cart.value = getCart();
+});
+
+const totalSumPrice = computed(() => {
   if (cart.value.length > 0) {
     let sum = 0;
 
     cart.value.map((item) => {
       sum += item.SoLuong * item.bookDetail.Gia;
     });
-    totalPrice.value = sum;
-  } else {
-    cart.value = [];
+    return sum;
   }
 });
 
-const handleDeleteBook = () => {
-  console.log("handleDeleteBook");
+const handleDeleteBook = (data) => {
+  deleteItemCart(data._id);
 };
 
 const updateNumber = (value) => {
@@ -86,7 +97,7 @@ const handleBooking = async () => {
     </div>
 
     <div>
-      <div v-if="cart?.value?.length < 0">
+      <div v-if="cart <= 0">
         <a-empty />
       </div>
       <div v-else>
@@ -104,8 +115,8 @@ const handleBooking = async () => {
                   class="centered-image"
                 />
               </div>
-              <div class="w-50">{{ item?.bookDetail?.TenHH }}</div>
-              <div>{{ item?.bookDetail?.Gia }}</div>
+              <div class="nameWidth">{{ item?.bookDetail?.TenHH }}</div>
+              <div>{{ item?.bookDetail?.Gia.toLocaleString("vi-VN") || 0 }} đ</div>
               <div>
                 <a-input-number
                   :value="item?.SoLuong"
@@ -114,11 +125,12 @@ const handleBooking = async () => {
                   @change="updateNumber"
                 />
               </div>
+              <div>Tổng : {{ item?.TongTien.toLocaleString("vi-VN") || 0 }}đ</div>
               <div>
                 <IconTrash
                   class="poiter mx-3"
                   style="color: red"
-                  @click="handleDeleteBook"
+                  @click="() => handleDeleteBook(item)"
                 />
               </div>
             </div>
@@ -128,13 +140,13 @@ const handleBooking = async () => {
             <div class="bg-white rounded p-4 border">
               <div class="d-flex justify-content-between">
                 <div>Tạm tính</div>
-                <div>{{ totalPrice.toLocaleString("vi-VN") }} đ</div>
+                <div>{{ totalSumPrice?.toLocaleString("vi-VN") || 0 }} đ</div>
               </div>
               <hr />
               <div class="d-flex justify-content-between align-items-center">
                 <div>Tổng tiền</div>
                 <div class="price fs-3">
-                  {{ totalPrice.toLocaleString("vi-VN") }} đ
+                  {{ totalSumPrice?.toLocaleString("vi-VN") || 0 }} đ
                 </div>
               </div>
               <hr />
@@ -266,5 +278,9 @@ const handleBooking = async () => {
 
 .poiter {
   cursor: pointer;
+}
+
+.nameWidth {
+  width: 320px;
 }
 </style>

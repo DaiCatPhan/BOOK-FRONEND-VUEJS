@@ -3,7 +3,7 @@ import { IconPlus } from "@tabler/icons-vue";
 import { IconMinus } from "@tabler/icons-vue";
 import { IconArrowBackUp } from "@tabler/icons-vue";
 
-import { ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import Service from "../../../service/api";
@@ -52,6 +52,7 @@ function addToCart(product) {
     cart.push({
       SoLuong: product.SoLuong,
       _id: product.idBook,
+      TongTien: product.TongTien,
       bookDetail: product.bookDetail,
     });
   }
@@ -62,6 +63,7 @@ function addToCart(product) {
 const handleAddCart = async () => {
   const dataLocal = {
     SoLuong: numberBook.value,
+    TongTien: numberBook.value * bookDetail.value.Gia,
     idBook: idBook.value,
     bookDetail: bookDetail.value,
   };
