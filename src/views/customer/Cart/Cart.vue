@@ -1,39 +1,36 @@
 <script setup>
 import { IconMoodSmileBeam } from "@tabler/icons-vue";
 import { IconTrash } from "@tabler/icons-vue";
-import { ref } from "vue";
+import { ref, watch, watchEffect } from "vue";
 import { reactive } from "vue";
 import { string } from "vue-types";
 
-const list1 = ref([
-  {
-    TenHH: "Chiến tranh tiền tệ",
-    MoTaHH: "Sản phẩm số 1 việt Nam",
-    Gia: 150000,
-    SoLuongHang: 100,
-    GhiChu: "Sản phẩm số 1 Việt Nam",
-    TheLoai: "kinh tế",
-    TacGia: "Son Ho Bin",
-    HinhHH:
-      "https://bizweb.dktcdn.net/100/180/408/products/chien-tranh-tien-te-1-c0c72970-7152-44f1-b27f-10e698f2acff.jpg?v=1667607754867",
-  },
-  {
-    TenHH: "Chiến tranh tiền tệ",
-    MoTaHH: "Sản phẩm số 1 việt Nam",
-    Gia: 150000,
-    SoLuongHang: 100,
-    GhiChu: "Sản phẩm số 1 Việt Nam",
-    TheLoai: "kinh tế",
-    TacGia: "Son Ho Bin",
-    HinhHH:
-      "https://bizweb.dktcdn.net/100/180/408/products/chien-tranh-tien-te-1-c0c72970-7152-44f1-b27f-10e698f2acff.jpg?v=1667607754867",
-  },
-]);
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart")) || [];
+}
 
-const list = ref([]);
+// Xóa giỏ hàng
+function clearCart() {
+  localStorage.removeItem("cart");
+}
 
 const currentStep = ref(0);
-const numberBook = ref(3);
+const cart = ref([]);
+const totalPrice = ref(0);
+
+watchEffect(() => {
+  cart.value = getCart();
+  if (cart.value.length > 0) {
+    let sum = 0;
+
+    cart.value.map((item) => {
+      sum += item.SoLuong * item.bookDetail.Gia;
+    });
+    totalPrice.value = sum;
+  } else {
+    cart.value = [];
+  }
+});
 
 const handleDeleteBook = () => {
   console.log("handleDeleteBook");
@@ -89,7 +86,7 @@ const handleBooking = async () => {
     </div>
 
     <div>
-      <div v-if="list.length <= 0">
+      <div v-if="cart?.value?.length < 0">
         <a-empty />
       </div>
       <div v-else>
@@ -97,19 +94,21 @@ const handleBooking = async () => {
           <div class="col-lg-8">
             <div
               class="d-flex flex-wrap justify-content-between align-items-center border mb-4 rounded bg-white"
+              v-for="item in cart"
+              :key="item._id"
             >
               <div class="image-container">
                 <img
-                  src="https://bizweb.dktcdn.net/100/180/408/products/chien-tranh-tien-te-1-c0c72970-7152-44f1-b27f-10e698f2acff.jpg?v=1667607754867"
+                  :src="item?.bookDetail?.HinhHH"
                   alt="notFound"
                   class="centered-image"
                 />
               </div>
-              <div>Chiến tranh tiền tệ</div>
-              <div>150.000 vnd</div>
+              <div class="w-50">{{ item?.bookDetail?.TenHH }}</div>
+              <div>{{ item?.bookDetail?.Gia }}</div>
               <div>
                 <a-input-number
-                  :value="numberBook"
+                  :value="item?.SoLuong"
                   :min="1"
                   :max="100"
                   @change="updateNumber"
@@ -129,12 +128,14 @@ const handleBooking = async () => {
             <div class="bg-white rounded p-4 border">
               <div class="d-flex justify-content-between">
                 <div>Tạm tính</div>
-                <div>150.000 đ</div>
+                <div>{{ totalPrice.toLocaleString("vi-VN") }} đ</div>
               </div>
               <hr />
               <div class="d-flex justify-content-between align-items-center">
                 <div>Tổng tiền</div>
-                <div class="price fs-3">150.000 đ</div>
+                <div class="price fs-3">
+                  {{ totalPrice.toLocaleString("vi-VN") }} đ
+                </div>
               </div>
               <hr />
               <div class="text-center">

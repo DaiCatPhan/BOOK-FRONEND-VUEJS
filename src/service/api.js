@@ -6,9 +6,15 @@ const create_HANG_HOA = async (rawData) => {
   return axios.post("http://localhost:3000/api/v1/product/create", rawData);
 };
 
-const readPanigate_HANG_HOA = async (rawData='') => {
+const readPanigate_HANG_HOA = async (rawData = "") => {
   return axios.get(
     `http://localhost:3000/api/v1/product/readPanigate${rawData}`
+  );
+};
+
+const read_HANG_HOA = async (rawData) => {
+  return axios.get(
+    `http://localhost:3000/api/v1/product/read?idProduct=${rawData.idProduct}`
   );
 };
 
@@ -21,4 +27,5 @@ const readPanigate_HANG_HOA = async (rawData='') => {
 export default {
   create_HANG_HOA,
   readPanigate_HANG_HOA,
+  read_HANG_HOA,
 };

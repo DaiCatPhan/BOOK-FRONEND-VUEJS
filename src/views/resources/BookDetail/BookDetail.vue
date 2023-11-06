@@ -1,26 +1,31 @@
 <script setup>
 import { IconPlus } from "@tabler/icons-vue";
 import { IconMinus } from "@tabler/icons-vue";
-import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { IconArrowBackUp } from "@tabler/icons-vue";
 
+import { ref, watchEffect } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+import Service from "../../../service/api";
+
+const router = useRouter();
 const idBook = ref(useRoute().params.id);
-console.log("idBook", idBook.value);
+
+const bookDetail = ref({});
+
+const fetchData = async () => {
+  const data = await Service.read_HANG_HOA({ idProduct: idBook.value });
+
+  if (data && data.data.EC === 0) {
+    bookDetail.value = data.data.DT;
+  }
+};
+watchEffect(() => {
+  fetchData();
+});
 
 const value = ref(5);
 const numberBook = ref(1);
-
-const bookDetail = ref({
-  TenHH: "Chiến tranh tiền tệ",
-  MoTaHH: "Sản phẩm số 1 việt Nam",
-  Gia: 150000,
-  SoLuongHang: 100,
-  GhiChu: "Sản phẩm số 1 Việt Nam",
-  TheLoai: "kinh tế",
-  TacGia: "Son Ho Bin",
-  HinhHH:
-    "https://bizweb.dktcdn.net/100/180/408/products/chien-tranh-tien-te-1-c0c72970-7152-44f1-b27f-10e698f2acff.jpg?v=1667607754867",
-});
 
 const handleMinusNumber = () => {
   if (numberBook.value > 1) {
@@ -31,10 +36,55 @@ const handleMinusNumber = () => {
 const handlePlusNumber = () => {
   numberBook.value += 1;
 };
+
+// Xử lí thêm vào vỏ hàng
+
+function addToCart(product) {
+  // Kiểm tra xem localStorage đã có giỏ hàng chưa
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+  const existingProduct = cart.find((item) => item._id === product.idBook);
+  if (existingProduct) {
+    // Nếu sản phẩm đã tồn tại, tăng số lượng sản phẩm trong giỏ hàng
+    existingProduct.SoLuong += product.SoLuong;
+  } else {
+    cart.push({
+      SoLuong: product.SoLuong,
+      _id: product.idBook,
+      bookDetail: product.bookDetail,
+    });
+  }
+
+  // Lưu giỏ hàng vào localStorage
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+const handleAddCart = async () => {
+  const dataLocal = {
+    SoLuong: numberBook.value,
+    idBook: idBook.value,
+    bookDetail: bookDetail.value,
+  };
+  addToCart(dataLocal);
+  router.push("/order");
+};
+
+// Xử lí mua hàng
+
+const handleBuyBook = async () => {
+  alert("handleBuyBook");
+};
 </script>
 <template>
   <div class="min-vh-75 border bg-secondary-subtle">
-    <div class="bodyBookDetail">
+    <div class="bodyBookDetail positon-relative">
+      <router-link to="/books">
+        <IconArrowBackUp
+          class="position-absolute mx-2"
+          style="color: blue; width: 40px"
+          @click="handleBackIcon"
+        />
+      </router-link>
       <div class="row">
         <div class="col-5">
           <div class="image-container">
@@ -62,7 +112,7 @@ const handlePlusNumber = () => {
               </div>
             </div>
             <div class="p-3 bg-light fs-3 price">
-              {{ bookDetail?.Gia.toLocaleString("vi-VN") }} vnd
+              {{ bookDetail?.Gia?.toLocaleString("vi-VN") || 0 }} vnd
             </div>
             <div>Vận chuyển : Miễn phí vận chuyển</div>
             <div class="d-flex">
@@ -77,10 +127,14 @@ const handlePlusNumber = () => {
             </div>
             <div class="d-flex">
               <div>
-                <button class="btn btn_addCart">Thêm vào giỏ hàng</button>
+                <button class="btn btn_addCart" @click="handleAddCart">
+                  Thêm vào giỏ hàng
+                </button>
               </div>
               <div>
-                <button class="btn btn-danger mx-3">Mua ngay</button>
+                <button class="btn btn-danger mx-3" @click="handleBuyBook">
+                  Mua ngay
+                </button>
               </div>
             </div>
           </div>

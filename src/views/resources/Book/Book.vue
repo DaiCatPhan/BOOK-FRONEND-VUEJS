@@ -11,8 +11,8 @@ const type = ref("");
 // Xử lí pagination
 const books = ref([]);
 const current = ref(1);
-const pageSize = ref(5);
-const total = ref(20);
+const pageSize = ref(8);
+const total = ref(0);
 
 const onChangePagination = (page, pageSize) => {
   current.value = +page;
@@ -22,19 +22,55 @@ const handlePageSize = (page, newSize) => {
   pageSize.value = newSize;
 };
 
+const caterory = ref([
+  {
+    id: 1,
+    label: "Kinh tế",
+    value: "kinh tế",
+  },
+  {
+    id: 2,
+    label: "Tôn giáo",
+    value: "tôn giáo",
+  },
+  {
+    id: 3,
+    label: "Tiểu thuyết",
+    value: "tiểu thuyết",
+  },
+  {
+    id: 4,
+    label: "Truyện ngắn",
+    value: "truyện ngắn",
+  },
+  {
+    id: 5,
+    label: "Truyện cười",
+    value: "truyện cười",
+  },
+  {
+    id: 6,
+    label: "Sức khỏe",
+    value: "sức khỏe",
+  },
+]);
+
+const handleSelectType = (data) => {
+  type.value = data;
+};
+
+const handleTabChange = (key) => {
+  sort.value = key;
+};
+
 // Gọi API lấy datas
 
-const queryApi = computed(() => {
-  if (sort.value) {
-    return `?page=${+current.value}&limit=${+pageSize.value}&type=&sort=${
-      sort.value
-    }`;
-  }
-  return `?page=${+current.value}&limit=${+pageSize.value}`;
-});
-
 const fetchData = async () => {
-  const data = await Service.readPanigate_HANG_HOA(queryApi.value);
+  const data = await Service.readPanigate_HANG_HOA(
+    `?page=${+current.value}&limit=${+pageSize.value}&type=${
+      type.value || ""
+    }&sort=${sort.value || "createdAt"}`
+  );
 
   if (data && data.data.EC === 0 && data.data.DT.pagination.length > 0) {
     books.value = data.data.DT.pagination;
@@ -45,53 +81,19 @@ const fetchData = async () => {
 watchEffect(() => {
   fetchData();
 });
-watch([current, pageSize, queryApi], () => {
+watch([current, pageSize, type, sort], () => {
   fetchData();
 });
-
-const caterory = ref([
-  {
-    id: 1,
-    label: "toán",
-    value: "toán",
-  },
-  {
-    id: 2,
-    label: "lý",
-    value: "lý",
-  },
-  {
-    id: 3,
-    label: "hóa",
-    value: "hóa",
-  },
-  {
-    id: 4,
-    label: "Cong nghe ",
-    value: "CNTT",
-  },
-]);
-
-const handleSelectType = (data) => {
-  console.log("type", data);
-  type.value = data;
-};
-
-const handleTabChange = (key) => {
-  console.log("handleTabChange", key);
-  sort.value = key;
-  queryApi.value = `?page=${+current.value}&limit=${+pageSize.value}&sort=${key}`;
-};
 </script>
 
 
 <template>
   <div>
-    <div class="row min-vh-100">
-      <div class="col-2 border px-5">
-        <div>Bộ lọc tìm kiếm</div>
-        <div>
-          <div v-for="item in caterory" :key="item.id" class="my-2">
+    <div class="row min-vh-100 px-3">
+      <div class="col-2 p-0">
+        <div class="border w-100 text-center py-3">Bộ lọc tìm kiếm</div>
+        <div class="w-75 m-auto">
+          <div v-for="item in caterory" :key="item.id" class="my-4">
             <a-checkbox
               @click="() => handleSelectType(item.value)"
               :checked="item.value === type"
@@ -105,8 +107,7 @@ const handleTabChange = (key) => {
         <div class="p-3">
           <div>
             <a-tabs v-model="activeKey" @change="handleTabChange">
-              <a-tab-pane key="" tab="Tất cả"> </a-tab-pane>
-              <a-tab-pane key="createdAt" tab="Hàng mới"> </a-tab-pane>
+              <a-tab-pane key="createdAt" tab="Tất cả"> </a-tab-pane>
               <a-tab-pane key="-Gia" tab="Giá cao đến thấp"> </a-tab-pane>
               <a-tab-pane key="Gia" tab="Giá thấp đến cao"> </a-tab-pane>
             </a-tabs>
@@ -135,7 +136,7 @@ const handleTabChange = (key) => {
                 :pageSize="pageSize"
                 :total="total"
                 :show-size-changer="true"
-                :pageSizeOptions="['5', '10', '15']"
+                :pageSizeOptions="['5','8', '10', '15']"
                 @change="onChangePagination"
                 @showSizeChange="handlePageSize"
               />
