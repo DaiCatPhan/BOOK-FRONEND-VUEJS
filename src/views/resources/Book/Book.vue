@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import CardBook from "../../../components/CardBook/CardBook.vue";
 import Service from "../../../service/api";
 import { Pagination } from "ant-design-vue";
+import { IconRotateClockwise } from "@tabler/icons-vue";
 
 const activeKey = ref("1");
 const sort = ref("");
@@ -84,6 +85,13 @@ watchEffect(() => {
 watch([current, pageSize, type, sort], () => {
   fetchData();
 });
+
+const handleRefetchIcon = () => {
+  (current.value = 1),
+    (pageSize.value = 8),
+    (type.value = ""),
+    (sort.value = "createdAt");
+};
 </script>
 
 
@@ -91,7 +99,14 @@ watch([current, pageSize, type, sort], () => {
   <div>
     <div class="row min-vh-100 px-3">
       <div class="col-2 p-0">
-        <div class="border w-100 text-center py-3">Bộ lọc tìm kiếm</div>
+        <div class="border w-100 text-center py-3">
+          Bộ lọc tìm kiếm
+          <span class="mx-2 poiter"
+            ><IconRotateClockwise
+              style="color: blue"
+              @click="handleRefetchIcon"
+          /></span>
+        </div>
         <div class="w-75 m-auto">
           <div v-for="item in caterory" :key="item.id" class="my-4">
             <a-checkbox
@@ -136,7 +151,7 @@ watch([current, pageSize, type, sort], () => {
                 :pageSize="pageSize"
                 :total="total"
                 :show-size-changer="true"
-                :pageSizeOptions="['5','8', '10', '15']"
+                :pageSizeOptions="['5', '8', '10', '15']"
                 @change="onChangePagination"
                 @showSizeChange="handlePageSize"
               />

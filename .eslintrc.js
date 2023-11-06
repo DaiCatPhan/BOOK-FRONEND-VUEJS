@@ -1,11 +1,9 @@
 module.exports = {
+  // ... other ESLint configuration ...
+
+  plugins: ["vue"],
   extends: [
-    // add more generic rulesets here, such as:
-    // 'eslint:recommended',
-    "plugin:vue/vue3-recommended",
-    // 'plugin:vue/recommended' // Use this if you are using Vue.js 2.x.
+    // ... other ESLint extensions ...
+    "plugin:vue/recommended",
   ],
-  rules: {
-    "vue/no-v-model-argument": "off",
-  },
 };

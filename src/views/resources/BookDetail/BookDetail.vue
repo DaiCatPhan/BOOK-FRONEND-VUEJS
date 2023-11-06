@@ -52,7 +52,6 @@ function addToCart(product) {
     cart.push({
       SoLuong: product.SoLuong,
       _id: product.idBook,
-      TongTien: product.TongTien,
       bookDetail: product.bookDetail,
     });
   }
@@ -63,7 +62,6 @@ function addToCart(product) {
 const handleAddCart = async () => {
   const dataLocal = {
     SoLuong: numberBook.value,
-    TongTien: numberBook.value * bookDetail.value.Gia,
     idBook: idBook.value,
     bookDetail: bookDetail.value,
   };

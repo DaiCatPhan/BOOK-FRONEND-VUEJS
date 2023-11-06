@@ -4,7 +4,9 @@ import { IconTrash } from "@tabler/icons-vue";
 import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { reactive } from "vue";
 import { string } from "vue-types";
+import { useRoute, useRouter } from "vue-router";
 
+const router = useRouter();
 const currentStep = ref(0);
 const cart = ref([]);
 
@@ -29,17 +31,21 @@ const deleteItemCart = (idBook) => {
 };
 
 onMounted(() => {
-  cart.value = getCart();
+  let rawDataCart = getCart();
+  rawDataCart.forEach((item) => {
+    item.TongTien = item.SoLuong * item.bookDetail.Gia;
+  });
+
+  cart.value = rawDataCart;
 });
 
 const totalSumPrice = computed(() => {
   if (cart.value.length > 0) {
-    let sum = 0;
-
-    cart.value.map((item) => {
-      sum += item.SoLuong * item.bookDetail.Gia;
-    });
-    return sum;
+    return cart.value.reduce((total, item) => {
+      return (total += item.SoLuong * item.bookDetail.Gia);
+    }, 0);
+  } else {
+    return 0;
   }
 });
 
@@ -55,25 +61,17 @@ const updateNumber = (value) => {
 const handleStepsFirst = async () => {
   currentStep.value = 1;
 };
-// Xử lí current 0 -------------------------------------------------------------------
 
 // Xử lí current 1
 const handleStepsSecond = async () => {
+  console.log("cart", cart);
   currentStep.value = 2;
 };
-// Xử lí current 1
 
 // Xử lí current 2
 const handleStepsThird = async () => {
-  alert("ok");
+  router.push("/history");
 };
-// Xử lí current 2
-
-// FORM Đăng Ký thong tin đặt Tour
-const handleBooking = async () => {
-  console.log("handleBooking", handleBooking);
-};
-// FORM Đăng Ký thong tin đặt Tour
 </script>
 
 <template>
@@ -116,7 +114,9 @@ const handleBooking = async () => {
                 />
               </div>
               <div class="nameWidth">{{ item?.bookDetail?.TenHH }}</div>
-              <div>{{ item?.bookDetail?.Gia.toLocaleString("vi-VN") || 0 }} đ</div>
+              <div>
+                {{ item?.bookDetail?.Gia.toLocaleString("vi-VN") || 0 }} đ
+              </div>
               <div>
                 <a-input-number
                   :value="item?.SoLuong"
@@ -125,7 +125,9 @@ const handleBooking = async () => {
                   @change="updateNumber"
                 />
               </div>
-              <div>Tổng : {{ item?.TongTien.toLocaleString("vi-VN") || 0 }}đ</div>
+              <div>
+                Tổng : {{ item?.TongTien.toLocaleString("vi-VN") || 0 }}đ
+              </div>
               <div>
                 <IconTrash
                   class="poiter mx-3"
@@ -165,38 +167,33 @@ const handleBooking = async () => {
         <div class="row m-5" style="min-height: 22vh" v-if="currentStep === 1">
           <div class="col-lg-8">
             <div
-              class="d-flex flex-wrap justify-content-between align-items-center border mb-4 rounded bg-white"
+              class="d-flex flex-wrap justify-content-around align-items-center border mb-4 rounded bg-white"
+              v-for="item in cart"
+              :key="item._id"
             >
               <div class="image-container">
                 <img
-                  src="https://bizweb.dktcdn.net/100/180/408/products/chien-tranh-tien-te-1-c0c72970-7152-44f1-b27f-10e698f2acff.jpg?v=1667607754867"
+                  :src="item?.bookDetail?.HinhHH"
                   alt="notFound"
                   class="centered-image"
                 />
               </div>
-              <div>Chiến tranh tiền tệ</div>
-              <div>150.000 vnd</div>
+              <div class="nameWidth">{{ item?.bookDetail?.TenHH }}</div>
               <div>
-                <a-input-number
-                  :value="numberBook"
-                  :min="1"
-                  :max="100"
-                  @change="updateNumber"
-                />
+                {{ item?.bookDetail?.Gia.toLocaleString("vi-VN") || 0 }} đ
               </div>
               <div>
-                <IconTrash
-                  class="poiter mx-3"
-                  style="color: red"
-                  @click="handleDeleteBook"
-                />
+                <a-input-number :value="item?.SoLuong" :min="1" :max="100" />
+              </div>
+              <div>
+                Tổng : {{ item?.TongTien.toLocaleString("vi-VN") || 0 }}đ
               </div>
             </div>
           </div>
           <div class="col-lg-4">
             <div class="bg-white rounded p-4 border">
               <div class="mb-3">
-                <label for="" class="form-label">Họ và tên</label>
+                <label for="" class="form-label">Email</label>
                 <input type="text" class="form-control" />
               </div>
               <div class="mb-3">
@@ -209,10 +206,10 @@ const handleBooking = async () => {
                   placeholder="Leave a comment here"
                   id="floatingTextarea"
                 ></textarea>
-                <label for="floatingTextarea">Địa chỉ</label>
+                <label for="floatingTextarea">Địa chỉ giao hàng</label>
               </div>
               <div class="mb-3">
-                <label checked for="" class="form-label text-secondary"
+                <label checked class="form-label text-secondary"
                   >Hình thức thanh toán</label
                 >
                 <div>
@@ -222,7 +219,9 @@ const handleBooking = async () => {
               <hr />
               <div class="d-flex justify-content-around align-items-center">
                 <div>Tổng tiền</div>
-                <div class="price fs-3">150.000 đ</div>
+                <div class="price fs-3">
+                  {{ totalSumPrice?.toLocaleString("vi-VN") || 0 }} đ
+                </div>
               </div>
               <hr />
               <div class="text-center">
