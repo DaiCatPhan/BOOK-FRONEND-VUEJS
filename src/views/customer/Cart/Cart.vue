@@ -15,19 +15,13 @@ function getCart() {
 }
 
 const deleteItemCart = (idBook) => {
-  // Lấy giỏ hàng từ localStorage
   const cartFromLocalStorage = getCart();
-
-  // Lọc ra các mục mà bạn muốn giữ lại
   const updatedCart = cartFromLocalStorage.filter(
     (item) => item._id !== idBook
   );
-
-  // Cập nhật giỏ hàng trong localStorage
-  localStorage.setItem("cart", JSON.stringify(updatedCart));
-
-  // Cập nhật giỏ hàng bằng giá trị mới
   cart.value = updatedCart;
+  console.log("cart", cart.value);
+  localStorage.setItem("cart", JSON.stringify(updatedCart));
 };
 
 onMounted(() => {
@@ -53,10 +47,6 @@ const handleDeleteBook = (data) => {
   deleteItemCart(data._id);
 };
 
-const updateNumber = (value) => {
-  numberBook.value = value;
-};
-
 // Xử lí current 0
 const handleStepsFirst = async () => {
   currentStep.value = 1;
@@ -64,7 +54,6 @@ const handleStepsFirst = async () => {
 
 // Xử lí current 1
 const handleStepsSecond = async () => {
-  console.log("cart", cart);
   currentStep.value = 2;
 };
 
@@ -115,7 +104,7 @@ const handleStepsThird = async () => {
               </div>
               <div class="nameWidth">{{ item?.bookDetail?.TenHH }}</div>
               <div>
-                {{ item?.bookDetail?.Gia.toLocaleString("vi-VN") || 0 }} đ
+                {{ item?.bookDetail?.Gia?.toLocaleString("vi-VN") || 0 }} đ
               </div>
               <div>
                 <a-input-number
@@ -126,7 +115,7 @@ const handleStepsThird = async () => {
                 />
               </div>
               <div>
-                Tổng : {{ item?.TongTien.toLocaleString("vi-VN") || 0 }}đ
+                Tổng : {{ item?.TongTien?.toLocaleString("vi-VN") || 0 }}đ
               </div>
               <div>
                 <IconTrash
