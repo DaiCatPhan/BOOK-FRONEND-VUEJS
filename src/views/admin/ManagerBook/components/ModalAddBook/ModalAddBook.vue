@@ -5,9 +5,10 @@ import ServiceApi from "../../../../../service/api.js";
 import { toast } from "vue3-toastify";
 import axios from "axios";
 
-const { isShowModalAdd, closeModalAdd } = defineProps({
+const props = defineProps({
   closeModalAdd: Function,
   isShowModalAdd: Boolean,
+  fetchData: Function,
 });
 
 const TenHH = ref("");
@@ -42,23 +43,13 @@ const handleClose = () => {
   TacGia.value = "";
   HinhHH.value = "";
   TheLoai.value = "";
-  closeModalAdd();
+  props.closeModalAdd();
+  props.fetchData();
 };
 
 // Xử lí submit FORM
 const handleOk = async () => {
   // Gọi API create Book
-
-  console.log(
-    TenHH.value,
-    MoTaHH.value,
-    Gia.value,
-    SoLuongHang.value,
-    GhiChu.value,
-    TheLoai.value,
-    TacGia.value,
-    HinhHH.value
-  );
 
   try {
     const formData = new FormData();
@@ -92,11 +83,11 @@ const handleOk = async () => {
 <template>
   <div>
     <a-modal
-      :open="isShowModalAdd"
+      :open="props.isShowModalAdd"
       title="Thêm sách "
       :confirm-loading="confirmLoading"
       @ok="handleOk"
-      @cancel="closeModalAdd"
+      @cancel="handleClose"
       :style="{ top: '10px' }"
     >
       <form>

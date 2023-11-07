@@ -8,6 +8,7 @@ import axios from "axios";
 
 import ModalAddBook from "../components/ModalAddBook/ModalAddBook.vue";
 import ModalUpdateBook from "../components/ModalUpdateBook/ModalUpdateBook.vue";
+import ModalDeleteBook from "../components/ModalDeleteBook/ModalDeleteBook.vue";
 
 import Service from "../../../../service/api";
 
@@ -15,6 +16,7 @@ const isShowModalAdd = ref(false);
 const isShowModalUpdate = ref(false);
 const dataModalUpdate = ref({});
 const isShowModalDelete = ref(false);
+const dataModalDelete = ref({});
 
 const listBook = ref([]);
 const current = ref(1);
@@ -41,6 +43,10 @@ const closeModalUpdate = () => {
 // MODAL DELETE BOOK
 const handleDelete = async (data) => {
   isShowModalDelete.value = true;
+  dataModalDelete.value = data;
+};
+const closeModalDelete = (data) => {
+  isShowModalDelete.value = false;
 };
 
 // MODAL ADD BOOK
@@ -65,6 +71,11 @@ const columns = [
     key: "_id",
   },
   {
+    title: "ảnh",
+    dataIndex: "HinhHH",
+    key: "HinhHH",
+  },
+  {
     title: "TenHH",
     dataIndex: "TenHH",
     key: "TenHH",
@@ -87,7 +98,6 @@ const columns = [
 ];
 
 const handleTableChange = (data) => {
-  console.log("data", data);
   if (data) {
     current.value = data.current;
     pageSize.value = data.pageSize;
@@ -142,12 +152,25 @@ watch(
       @change="handleTableChange"
     >
       <template #bodyCell="{ column, record }">
+        <!-- Ảnh -->
+        <template v-if="column.key === 'HinhHH'">
+          <div class=" ">
+            <img
+              height="100"
+              width="100"
+              :src="record?.HinhHH"
+              alt="notFound"
+            />
+          </div>
+        </template>
+
+        <!-- Action -->
         <template v-if="column.key === 'action'">
-          <div class="d-flex border">
+          <div class="d-flex">
             <div class="poiter">
               <IconEdit
                 @click="() => handleUpdate(record)"
-                :style="{ color: 'yellow' }"
+                :style="{ color: 'blue' }"
               />
             </div>
             <div class="mx-3 poiter">
@@ -164,12 +187,19 @@ watch(
     <ModalAddBook
       :isShowModalAdd="isShowModalAdd"
       :closeModalAdd="closeModalAdd"
+      :fetchData="fetchData"
     />
 
     <ModalUpdateBook
       :isShowModalUpdate="isShowModalUpdate"
       :closeModalUpdate="closeModalUpdate"
-      :dataModalUpdate="dataModalUpdate.value"
+      :dataModalUpdate="dataModalUpdate"
+    />
+    <ModalDeleteBook
+      :isShowModalDelete="isShowModalDelete"
+      :closeModalDelete="closeModalDelete"
+      :dataModalDelete="dataModalDelete"
+      :fetchData="fetchData"
     />
   </div>
 </template>

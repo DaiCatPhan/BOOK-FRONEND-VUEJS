@@ -5,6 +5,15 @@ const create_HANG_HOA = async (rawData) => {
   return axios.post("/api/v1/product/create", rawData);
 };
 
+const update_HANG_HOA = async (rawData) => {
+  return axios.put("/api/v1/product/update", rawData);
+};
+
+const delete_HANG_HOA = async (rawData) => {
+  console.log("rădata", rawData);
+  return axios.delete("/api/v1/product/delete", { data: rawData });
+};
+
 const readPanigate_HANG_HOA = async (rawData = "") => {
   return axios.get(`/api/v1/product/readPanigate${rawData}`);
 };
@@ -37,6 +46,8 @@ export default {
   create_HANG_HOA,
   readPanigate_HANG_HOA,
   read_HANG_HOA,
+  update_HANG_HOA,
+  delete_HANG_HOA,
 
   // MODULE AUTHENTICATION
   login_AUTHENTICATION,

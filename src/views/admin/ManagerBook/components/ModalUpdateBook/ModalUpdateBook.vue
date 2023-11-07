@@ -1,130 +1,121 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 import { InputNumber, Upload } from "ant-design-vue";
 import ServiceApi from "../../../../../service/api.js";
 import { toast } from "vue3-toastify";
 
-const { isShowModalUpdate, closeModalUpdate, dataModalUpdate } = defineProps({
+const props = defineProps({
   closeModalUpdate: Function,
   isShowModalUpdate: Boolean,
   dataModalUpdate: Object,
 });
 
-console.log("isShowModalUpdate", isShowModalUpdate);
+const dataUpdate = ref({
+  idProduct: "",
+  TenHH: "",
+  MoTaHH: "",
+  Gia: 0,
+  SoLuongHang: 0,
+  GhiChu: "",
+  TacGia: "",
+  HinhHH: "",
+  TheLoai: "",
+});
 
-const TenHH = ref("");
-const MoTaHH = ref("");
-const Gia = ref(0);
-const SoLuongHang = ref(0);
-const GhiChu = ref("");
-const TacGia = ref("");
-const HinhHH = ref("");
-const TheLoai = ref("");
+const imagePage = ref("");
+const confirmLoading = ref(false);
+
+watchEffect(() => {
+  dataUpdate.value.idProduct = props.dataModalUpdate._id || "";
+  dataUpdate.value.TenHH = props.dataModalUpdate.TenHH || "";
+  dataUpdate.value.MoTaHH = props.dataModalUpdate.MoTaHH || "";
+  dataUpdate.value.Gia = props.dataModalUpdate.Gia || "";
+  dataUpdate.value.SoLuongHang = props.dataModalUpdate.SoLuongHang || "";
+  dataUpdate.value.GhiChu = props.dataModalUpdate.GhiChu || "";
+  dataUpdate.value.TacGia = props.dataModalUpdate.TacGia || "";
+  dataUpdate.value.HinhHH = props.dataModalUpdate.HinhHH || "";
+  dataUpdate.value.TheLoai = props.dataModalUpdate.TheLoai || "";
+  // Cập nhật các biến ref khác tương tự ở đây
+  imagePage.value = props.dataModalUpdate.HinhHH || "";
+});
 
 // Xử lí hình ảnh
 const handleChangeImage = (info) => {
   const file = info.file.originFileObj;
-  HinhHH.value = file;
-};
-
-// Xử lí chọn thể loại
-const handleChangeSelectType = (value) => {
-  TheLoai.value = value;
+  dataUpdate.value.HinhHH = file;
 };
 
 // Goi API thanh cong xóa dữ liệu và đóng đi
 const handleClose = () => {
-  TenHH.value = "";
-  MoTaHH.value = "";
-  Gia.value = 0;
-  SoLuongHang.value = 0;
-  GhiChu.value = "";
-  TacGia.value = "";
-  HinhHH.value = "";
-  TheLoai.value = "";
-  closeModalUpdate();
+  props.closeModalUpdate();
 };
 
 // Xử lí submit FORM
 const handleOk = async () => {
-  // Gọi API create Book
-  //   console.log(
-  //     TenHH.value,
-  //     MoTaHH.value,
-  //     Gia.value,
-  //     SoLuongHang.value,
-  //     GhiChu.value,
-  //     TheLoai.value,
-  //     TacGia.value,
-  //     HinhHH.value
-  //   );
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("TenHH", TenHH.value);
-  //     formData.append("MoTaHH", MoTaHH.value);
-  //     formData.append("Gia", parseInt(Gia.value, 10));
-  //     formData.append("SoLuongHang", parseInt(SoLuongHang.value, 10));
-  //     formData.append("GhiChu", GhiChu.value);
-  //     formData.append("TheLoai", TheLoai.value);
-  //     formData.append("TacGia", TacGia.value);
-  //     formData.append("HinhHH", HinhHH.value);
-  //     confirmLoading.value = true;
-  //     const res = await ServiceApi.create_HANG_HOA(formData);
-  //     confirmLoading.value = false;
-  //     if (res && res.data && res.data.EC === 0) {
-  //       toast.success("Tạo sách thành công");
-  //       handleClose();
-  //     } else {
-  //       toast.error(res.data.EM);
-  //     }
-  //   } catch (error) {
-  //     console.log("error >>> ", error);
-  //     return;
-  //   }
+  try {
+    const formData = new FormData();
+    formData.append("idProduct", dataUpdate.value.idProduct);
+    formData.append("TenHH", dataUpdate.value.TenHH);
+    formData.append("MoTaHH", dataUpdate.value.MoTaHH);
+    formData.append("Gia", parseInt(dataUpdate.value.Gia, 10));
+    formData.append("SoLuongHang", parseInt(dataUpdate.value.SoLuongHang, 10));
+    formData.append("GhiChu", dataUpdate.value.GhiChu);
+    formData.append("TheLoai", dataUpdate.value.TheLoai);
+    formData.append("TacGia", dataUpdate.value.TacGia);
+    formData.append("HinhHH", dataUpdate.value.HinhHH);
+    confirmLoading.value = true;
+    const res = await ServiceApi.update_HANG_HOA(formData);
+    confirmLoading.value = false;
+    if (res && res.data && res.data.EC === 0) {
+      toast.success("Cập nhật sách thành công");
+      handleClose();
+    } else {
+      toast.error(res.data.EM);
+    }
+  } catch (error) {
+    console.log("error >>> ", error);
+    return;
+  }
 };
 </script>
 
 <template>
   <div>
     <a-modal
-      :open="isShowModalUpdate"
+      :open="props.isShowModalUpdate"
       title="Cập nhật  sách "
       @ok="handleOk"
       @cancel="closeModalUpdate"
       :style="{ top: '10px' }"
+      :width="900"
     >
       <form>
         <div class="mb-3">
           <label class="form-label">Nhập tên sách</label>
-          <input v-model="TenHH" type="text" class="form-control" />
+          <input v-model="dataUpdate.TenHH" type="text" class="form-control" />
         </div>
         <div class="mb-3 row">
           <div class="col-6">
             <label class="form-label">Giá </label>
-            <input v-model="Gia" type="text" class="form-control" />
+            <input v-model="dataUpdate.Gia" type="text" class="form-control" />
           </div>
           <div class="col-6">
             <label class="form-label">Thể loại</label>
 
-            <a-select
-              ref="select"
-              style="width: 220px"
-              v-model="TheLoai"
-              :value="TheLoai"
-              @change="handleChangeSelectType"
-            >
-              <a-select-option value="kinh tế">Kinh tế</a-select-option>
-              <a-select-option value="tôn giáo">Tôn giáo</a-select-option>
-              <a-select-option value="tiểu thuyết">Tiểu thuyết</a-select-option>
-              <a-select-option value="truyện ngắn">Truyện ngắn</a-select-option>
-              <a-select-option value="truyện cười">Truyện cười</a-select-option>
-              <a-select-option value="sức khỏe">Sức khỏe</a-select-option>
-            </a-select>
+            <select v-model="dataUpdate.TheLoai" class="form-select">
+              <option disabled>Please select one</option>
+              <option value="kinh tế">Kinh tế</option>
+              <option value="tôn giáo">Tôn giáo</option>
+              <option value="tiểu thuyết">Tiểu thuyết</option>
+              <option value="truyện ngắn">Truyện ngắn</option>
+              <option value="truyện cười">Truyện cười</option>
+              <option value="sức khỏe">Sức khỏe</option>
+            </select>
           </div>
         </div>
         <div class="form-floating">
           <textarea
-            v-model="MoTaHH"
+            v-model="dataUpdate.MoTaHH"
             class="form-control"
             style="height: 100px"
           ></textarea>
@@ -132,29 +123,45 @@ const handleOk = async () => {
         </div>
 
         <div class="mt-3 row">
-          <div class="col">
-            <Upload
-              @change="handleChangeImage"
-              list-type="picture-card"
-              :max-count="1"
-              :value="HinhHH"
-            >
-              <div>
-                <div class="ant-upload-text">Upload</div>
+          <div class="col mt-3">
+            <div class="d-flex">
+              <div
+                class="border mx-3 rounded d-flex justify-content-center align-items-center"
+              >
+                <img :src="imagePage" height="100" width="100" alt="notFound" />
               </div>
-            </Upload>
+
+              <Upload
+                @change="handleChangeImage"
+                list-type="picture-card"
+                :max-count="1"
+                :multiple="false"
+              >
+                <div>
+                  <div class="ant-upload-text">Upload</div>
+                </div>
+              </Upload>
+            </div>
           </div>
           <div class="col">
             <label class="form-label">Tác giả</label>
-            <input v-model="TacGia" type="text" class="form-control" />
+            <input
+              v-model="dataUpdate.TacGia"
+              type="text"
+              class="form-control"
+            />
             <label class="form-label">Số lượng sách</label>
-            <input v-model="SoLuongHang" type="text" class="form-control" />
+            <input
+              v-model="dataUpdate.SoLuongHang"
+              type="text"
+              class="form-control"
+            />
           </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label">Ghi chú</label>
-          <input v-model="GhiChu" type="text" class="form-control" />
+          <input v-model="dataUpdate.GhiChu" type="text" class="form-control" />
         </div>
       </form>
     </a-modal>
