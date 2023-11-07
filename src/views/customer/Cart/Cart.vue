@@ -20,7 +20,6 @@ const deleteItemCart = (idBook) => {
     (item) => item._id !== idBook
   );
   cart.value = updatedCart;
-  console.log("cart", cart.value);
   localStorage.setItem("cart", JSON.stringify(updatedCart));
 };
 
