@@ -5,6 +5,8 @@ import AdminLayout from "../layouts/AdminLayout/AdminLayout.vue";
 
 // ADMIN
 import CRUD_Book from "../views/admin/ManagerBook/CRUD/CRUD_Book.vue";
+import CRUD_Customer from "../views/admin/ManagerCustomer/CRUD/CRUD_Customer.vue";
+import CRUD_Booking from "../views/admin/ManagerBooking/CRUD/CRUD_Booking.vue";
 import HomeAdmin from "../views/admin/Home/Home.vue";
 import Dashboard from "../views/admin/Dashboard/Dashboard.vue";
 
@@ -22,7 +24,7 @@ import Profile from "../views/customer/Profile/Profile.vue";
 import History from "../views/customer/History/History.vue";
 
 const routes = [
-  // ADMIN
+  // ADMIN =======================================================
   {
     path: "/admin-home",
     component: HomeAdmin,
@@ -40,6 +42,20 @@ const routes = [
   {
     path: "/admin-managerBook",
     component: CRUD_Book,
+    meta: {
+      layout: AdminLayout,
+    },
+  },
+  {
+    path: "/admin-managerBooking",
+    component: CRUD_Booking,
+    meta: {
+      layout: AdminLayout,
+    },
+  },
+  {
+    path: "/admin-managerCustomer",
+    component: CRUD_Customer,
     meta: {
       layout: AdminLayout,
     },

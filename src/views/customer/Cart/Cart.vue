@@ -45,12 +45,12 @@ const handleDeleteBook = (data) => {
 // Xử lí current 0
 const handleStepsFirst = async () => {
   currentStep.value = 1;
-  console.log("Order", cart.value);
 };
 
 // Xử lí current 1
 const handleStepsSecond = async () => {
   currentStep.value = 2;
+  console.log("Order", cart.value);
 };
 
 // Xử lí current 2
@@ -218,10 +218,19 @@ const handleUpdateNumber = (item, newQuantity) => {
             <div class="bg-white rounded p-4 border">
               <div class="mb-3">
                 <label for="" class="form-label">Email</label>
-                <input type="text" class="form-control" />
+                <input
+                  disabled
+                  value="Phan Dai Cat"
+                  type="text"
+                  class="form-control"
+                />
               </div>
               <div class="mb-3">
                 <label for="" class="form-label">Họ và tên</label>
+                <input type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">Số điện thoại</label>
                 <input type="text" class="form-control" />
               </div>
               <div class="form-floating mb-3">

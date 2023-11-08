@@ -26,8 +26,9 @@
               <span>Manger Booking</span>
             </span>
           </template>
-          <a-menu-item key="4.1">Team 1</a-menu-item>
-          <a-menu-item key="4.2">Team 2</a-menu-item>
+          <router-link to="/admin-managerBooking"
+            ><a-menu-item key="4.1">CRUD</a-menu-item></router-link
+          >
         </a-sub-menu>
         <a-sub-menu key="5">
           <template #title>
@@ -35,7 +36,9 @@
               <span>Manger Customer</span>
             </span>
           </template>
-          <a-menu-item key="5.1">CRUD</a-menu-item>
+          <router-link to="/admin-managerCustomer">
+            <a-menu-item key="5.1">CRUD</a-menu-item></router-link
+          >
         </a-sub-menu>
         <a-menu-item key="6">
           <span>File</span>
