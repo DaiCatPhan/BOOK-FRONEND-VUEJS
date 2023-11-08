@@ -24,6 +24,9 @@ const read_HANG_HOA = async (rawData) => {
 
 // MODULE NHAN_VIEN
 // MODULE KHACH_HANG
+const readPanigation_KHACH_HANG = async (rawData) => {
+  return axios.get(`/api/v1/customer/readPanigation${rawData}`);
+};
 // MODULE DAT_HANG
 // MODULE DAT_HANG_CHI_TIET
 // MODULE HANG_HOA
@@ -48,6 +51,9 @@ export default {
   read_HANG_HOA,
   update_HANG_HOA,
   delete_HANG_HOA,
+
+  // MODULE KHACH_HANG
+  readPanigation_KHACH_HANG,
 
   // MODULE AUTHENTICATION
   login_AUTHENTICATION,
