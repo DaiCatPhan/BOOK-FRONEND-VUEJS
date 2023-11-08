@@ -25,10 +25,6 @@ const deleteItemCart = (idBook) => {
 
 onMounted(() => {
   let rawDataCart = getCart();
-  rawDataCart.forEach((item) => {
-    item.TongTien = item.SoLuong * item.bookDetail.Gia;
-  });
-
   cart.value = rawDataCart;
 });
 
@@ -49,6 +45,7 @@ const handleDeleteBook = (data) => {
 // Xử lí current 0
 const handleStepsFirst = async () => {
   currentStep.value = 1;
+  console.log("Order", cart.value);
 };
 
 // Xử lí current 1
@@ -59,6 +56,29 @@ const handleStepsSecond = async () => {
 // Xử lí current 2
 const handleStepsThird = async () => {
   router.push("/history");
+};
+
+const updateNumberCartLocal = (id, number) => {
+  const cartData = JSON.parse(localStorage.getItem("cart"));
+  const productIdToChange = id;
+  const newQuantity = number; // Số lượng mới
+
+  const updatedCartData = cartData.map((item) => {
+    if (item._id === productIdToChange) {
+      // Cập nhật số lượng cho sản phẩm cần thay đổi
+      item.SoLuong = newQuantity;
+    }
+    return item;
+  });
+
+  cart.value = updatedCartData;
+
+  localStorage.setItem("cart", JSON.stringify(updatedCartData));
+};
+
+// Thay đổi input number
+const handleUpdateNumber = (item, newQuantity) => {
+  updateNumberCartLocal(item._id, newQuantity);
 };
 </script>
 
@@ -110,11 +130,18 @@ const handleStepsThird = async () => {
                   :value="item?.SoLuong"
                   :min="1"
                   :max="100"
-                  @change="updateNumber"
+                  @update:value="
+                    (newQuantity) => handleUpdateNumber(item, newQuantity)
+                  "
                 />
               </div>
               <div>
-                Tổng : {{ item?.TongTien?.toLocaleString("vi-VN") || 0 }}đ
+                Tổng :
+                {{
+                  (item?.bookDetail?.Gia * item?.SoLuong).toLocaleString(
+                    "vi-VN"
+                  ) || 0
+                }}đ
               </div>
               <div>
                 <IconTrash
@@ -171,10 +198,19 @@ const handleStepsThird = async () => {
                 {{ item?.bookDetail?.Gia.toLocaleString("vi-VN") || 0 }} đ
               </div>
               <div>
-                <a-input-number :value="item?.SoLuong" :min="1" :max="100" />
+                <a-input-number
+                  :value="item?.SoLuong"
+                  :min="1"
+                  :max="100"
+                  :disabled="true"
+                />
               </div>
               <div>
-                Tổng : {{ item?.TongTien.toLocaleString("vi-VN") || 0 }}đ
+                {{
+                  (item.bookDetail?.Gia * item.SoLuong).toLocaleString(
+                    "vi-VN"
+                  ) || 0
+                }}đ
               </div>
             </div>
           </div>
