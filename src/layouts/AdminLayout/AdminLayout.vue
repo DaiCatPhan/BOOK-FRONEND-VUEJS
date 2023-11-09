@@ -1,3 +1,49 @@
+<script setup>
+import { IconUserSquareRounded } from "@tabler/icons-vue";
+import { onMounted, ref, warn, watch, watchEffect } from "vue";
+import { authenticationStore } from "../../stores/authenticationStore";
+import Service from "../../service/api";
+import { useRouter } from "vue-router";
+import { toast } from "vue3-toastify";
+
+const collapsed = ref(false);
+const selectedKeys = ref(["1"]);
+const router = useRouter();
+
+const authentication = authenticationStore();
+
+const profile = ref({});
+const isLogin = ref(false);
+
+const handleGetProfile = async () => {
+  try {
+    profile.value = authentication.getUser();
+    isLogin.value = authentication.getStateLogin();
+
+    if (profile?.value?.Role !== "admin") {
+      router.push("/");
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+watch(async () => {
+  await handleGetProfile();
+});
+
+const handleLogout = async () => {
+  const res = await Service.logout_AUTHENTICATION();
+  if (res && res.data.EC === 0) {
+    router.push("/");
+    toast.success(res.data.EM);
+    authentication.logout();
+  } else {
+    toast.success(res.data.EM);
+  }
+};
+</script>
+
 <template>
   <a-layout style="min-height: 100vh">
     <a-layout-sider collapsible>
@@ -51,13 +97,15 @@
           <div></div>
           <div>
             <a-dropdown-button>
-              Tài khoản
+              {{ profile?.Email }}
               <template #overlay>
                 <a-menu>
                   <a-menu-item key="1"> Hồ sơ của tôi </a-menu-item>
                   <a-menu-item key="2"> Giỏ hàng của tôi </a-menu-item>
                   <a-menu-item key="3"> Lịch sử mua hàng </a-menu-item>
-                  <a-menu-item key="4"> Log out </a-menu-item>
+                  <a-menu-item key="4" @click="handleLogout">
+                    Log out
+                  </a-menu-item>
                 </a-menu>
               </template>
               <template #icon
@@ -83,12 +131,21 @@
     </a-layout>
   </a-layout>
 </template>
-<script setup>
-import { IconUserSquareRounded } from "@tabler/icons-vue";
-import { ref } from "vue";
-const collapsed = ref(false);
-const selectedKeys = ref(["1"]);
-</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style scoped>
 #components-layout-demo-side .logo {
   height: 32px;

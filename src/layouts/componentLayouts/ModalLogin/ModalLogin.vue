@@ -3,8 +3,12 @@ import { ref } from "vue";
 import { useToast } from "vue-toastification";
 import { toast } from "vue3-toastify";
 import Service from "../../../service/api";
-
+import { useRouter } from "vue-router";
+import { authenticationStore } from "../../../stores/authenticationStore";
 const confirmLoading = ref(false);
+const router = useRouter();
+
+const authenticaiton = authenticationStore();
 
 const props = defineProps({
   isShowModalLogin: Boolean,
@@ -14,7 +18,7 @@ const props = defineProps({
 const dataLoginUser = ref({
   Email: "",
   Password: "",
-}); 
+});
 
 const validate = () => {
   const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
@@ -52,10 +56,17 @@ const handleOk = async () => {
     return;
   }
   const res = await Service.login_AUTHENTICATION(dataLoginUser.value);
-  console.log("res", res);
   if (res && res.data.EC === 0 && res.data.DT.token) {
     useToast().success(res.data.EM);
     handleCancel();
+
+    authenticaiton.setUserAndLogin(res.data.DT.tokentData);
+
+    if (res.data.DT.tokentData.Role === "admin") {
+      router.push("/admin-home");
+    } else {
+      router.push("/");
+    }
   } else {
     useToast().success(res.data.EM);
   }

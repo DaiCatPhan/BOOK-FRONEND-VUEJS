@@ -2,10 +2,36 @@
 
 <script setup>
 import { IconUserSquareRounded } from "@tabler/icons-vue";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
+import { useRouter } from "vue-router";
+import { toast } from "vue3-toastify";
+
+import Service from "../../../service/api";
 
 import ModalLogin from "../ModalLogin/ModalLogin.vue";
 import ModalRegister from "../ModalRegister/ModalRegister.vue";
+
+import { authenticationStore } from "../../../stores/authenticationStore";
+const router = useRouter();
+const authentication = authenticationStore();
+const profile = ref({});
+const isLogin = ref(false);
+
+watchEffect(() => {
+  profile.value = authentication.getUser();
+  isLogin.value = authentication.getStateLogin();
+});
+
+const handleLogout = async () => {
+  const res = await Service.logout_AUTHENTICATION();
+  if (res && res.data.EC === 0) {
+    router.push("/");
+    toast.success(res.data.EM);
+    authentication.logout();
+  } else {
+    toast.success(res.data.EM);
+  }
+};
 
 const isShowModalLogin = ref(false);
 const isShowModalRegister = ref(false);
@@ -74,8 +100,8 @@ const closeModalRegister = () => {
           </li>
         </ul>
         <div class="d-flex">
-          <!-- <a-dropdown-button>
-            Tài khoản
+          <a-dropdown-button v-if="isLogin === true">
+            {{ profile?.Email || "" }}
             <template #overlay>
               <a-menu>
                 <router-link to="/profile"
@@ -94,16 +120,18 @@ const closeModalRegister = () => {
                   </a-menu-item></router-link
                 >
                 <a-menu-item key="4">
-                  <router-link to="/">Log out</router-link>
+                  <router-link to="/" @click="handleLogout"
+                    >Log out</router-link
+                  >
                 </a-menu-item>
               </a-menu>
             </template>
             <template #icon
               ><IconUserSquareRounded style="margin-bottom: 3px"
             /></template>
-          </a-dropdown-button> -->
+          </a-dropdown-button>
 
-          <a-dropdown-button>
+          <a-dropdown-button v-else>
             Tài khoản
             <template #overlay>
               <a-menu>
