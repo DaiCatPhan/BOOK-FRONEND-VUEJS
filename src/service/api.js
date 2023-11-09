@@ -10,7 +10,6 @@ const update_HANG_HOA = async (rawData) => {
 };
 
 const delete_HANG_HOA = async (rawData) => {
-  console.log("rădata", rawData);
   return axios.delete("/api/v1/product/delete", { data: rawData });
 };
 
@@ -26,6 +25,23 @@ const read_HANG_HOA = async (rawData) => {
 // MODULE KHACH_HANG
 const readPanigation_KHACH_HANG = async (rawData) => {
   return axios.get(`/api/v1/customer/readPanigation${rawData}`);
+};
+
+// MODULE VO_HANG
+const readPanigation_VO_HANG = async (rawData) => {
+  return axios.get(`/api/v1/cart/readPanigation${rawData}`);
+};
+
+const updateNumBer_VO_HANG = async (rawData) => {
+  return axios.patch(`/api/v1/cart/update`, rawData);
+};
+
+const deleteItem_VO_HANG = async (rawData) => {
+  return axios.delete(`/api/v1/cart/delete`, { data: rawData });
+};
+
+const create_VO_HANG = async (rawData) => {
+  return axios.post(`/api/v1/cart/create`, rawData);
 };
 // MODULE DAT_HANG
 // MODULE DAT_HANG_CHI_TIET
@@ -52,6 +68,11 @@ export default {
   update_HANG_HOA,
   delete_HANG_HOA,
 
+  // MODULE VO_HANG
+  readPanigation_VO_HANG,
+  updateNumBer_VO_HANG,
+  deleteItem_VO_HANG,
+  create_VO_HANG,
   // MODULE KHACH_HANG
   readPanigation_KHACH_HANG,
 

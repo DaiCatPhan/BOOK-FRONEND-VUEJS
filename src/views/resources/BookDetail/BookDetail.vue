@@ -2,11 +2,36 @@
 import { IconPlus } from "@tabler/icons-vue";
 import { IconMinus } from "@tabler/icons-vue";
 import { IconArrowBackUp } from "@tabler/icons-vue";
+import { message } from "ant-design-vue";
 
 import { computed, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import { authenticationStore } from "../../../stores/authenticationStore";
+
+import ModalLogin from "../../../layouts/componentLayouts/ModalLogin/ModalLogin.vue";
 import Service from "../../../service/api";
+
+//==== Xử lí khi chưa đăng nhập
+const authenticaiton = authenticationStore();
+const isLogin = ref(false);
+const profile = ref({});
+
+const isShowModalLogin = ref(false);
+
+const OpenModalLogin = () => {
+  isShowModalLogin.value = true;
+};
+const closeModalLogin = () => {
+  isShowModalLogin.value = false;
+};
+
+watchEffect(() => {
+  isLogin.value = authenticaiton.getStateLogin();
+  profile.value = authenticaiton.getUser();
+});
+
+// ===============================
 
 const router = useRouter();
 const idBook = ref(useRoute().params.id);
@@ -39,34 +64,26 @@ const handlePlusNumber = () => {
 
 // Xử lí thêm vào vỏ hàng
 
-function addToCart(product) {
-  // Kiểm tra xem localStorage đã có giỏ hàng chưa
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
-  const existingProduct = cart.find((item) => item._id === product.idBook);
-  if (existingProduct) {
-    // Nếu sản phẩm đã tồn tại, tăng số lượng sản phẩm trong giỏ hàng
-    existingProduct.SoLuong += product.SoLuong;
-  } else {
-    cart.push({
-      SoLuong: product.SoLuong,
-      _id: product.idBook,
-      bookDetail: product.bookDetail,
-    });
-  }
-
-  // Lưu giỏ hàng vào localStorage
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
 const handleAddCart = async () => {
-  const dataLocal = {
+  // Kiểm tra đã login hay chưa
+  if (isLogin.value === false) {
+    OpenModalLogin();
+    return;
+  }
+  //
+  const Cart = {
+    IdUser: profile.value._id,
+    IdHangHoa: bookDetail.value._id,
     SoLuong: numberBook.value,
-    idBook: idBook.value,
-    bookDetail: bookDetail.value,
   };
-  addToCart(dataLocal);
-  router.push("/order");
+
+  const res = await Service.create_VO_HANG(Cart);
+  if (res && res.data && res.data.EC === 0) {
+    message.success("Thêm vỏ hàng thành công");
+    router.push("/order");
+  } else {
+    message.success(res.data.EM);
+  }
 };
 
 // Xử lí mua hàng
@@ -163,6 +180,10 @@ const handleBuyBook = async () => {
         </div>
       </div>
     </div>
+    <ModalLogin
+      :isShowModalLogin="isShowModalLogin"
+      :closeModalLogin="closeModalLogin"
+    />
   </div>
 </template>
 

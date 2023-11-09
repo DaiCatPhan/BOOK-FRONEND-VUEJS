@@ -1,10 +1,13 @@
+import { ref, watchEffect } from "vue";
 import { authenticationStore } from "../../stores/authenticationStore";
 
+const profile = ref({});
+const isLogin = ref(false);
+
 const getProfilePinia = () => {
-  const authenticaiton = authenticationStore();
-  const profile = authenticaiton?.getUser();
-  const isLogin = authenticaiton?.getStateLogin();
-  console.log("asjkdhfkjsdfs", profile, isLogin);
+  const authentication = authenticationStore();
+  profile.value = authentication?.getUser();
+  isLogin.value = authentication?.getStateLogin();
   return { profile, isLogin };
 };
 

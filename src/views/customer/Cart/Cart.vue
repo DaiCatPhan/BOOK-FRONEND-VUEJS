@@ -5,41 +5,59 @@ import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { reactive } from "vue";
 import { string } from "vue-types";
 import { useRoute, useRouter } from "vue-router";
+import Service from "../../../service/api";
+import getProfilePinia from "../../../components/getDatainPinia/getDatainPinia";
 
+import { authenticationStore } from "../../../stores/authenticationStore";
+
+const authentication = authenticationStore();
+
+const profile = ref({});
+const idUser = ref("");
 const router = useRouter();
 const currentStep = ref(0);
 const cart = ref([]);
 
-function getCart() {
-  return JSON.parse(localStorage.getItem("cart")) || [];
-}
+const HoTen = ref("");
+const SoDienThoai = ref(0);
+const DiaChi = ref("");
 
-const deleteItemCart = (idBook) => {
-  const cartFromLocalStorage = getCart();
-  const updatedCart = cartFromLocalStorage.filter(
-    (item) => item._id !== idBook
-  );
-  cart.value = updatedCart;
-  localStorage.setItem("cart", JSON.stringify(updatedCart));
+const fetchData = async () => {
+  try {
+    const res = await Service.readPanigation_VO_HANG(
+      `?IdUser=${profile.value._id}`
+    );
+    if (res && res.data.EC === 0) {
+      cart.value = res.data.DT;
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
 };
-
-onMounted(() => {
-  let rawDataCart = getCart();
-  cart.value = rawDataCart;
+watch(() => {
+  profile.value = authentication.getUser();
+  HoTen.value  = profile.value.HoTen;
+  SoDienThoai.value  = profile.value.SoDienThoai;
+  DiaChi.value  = profile.value.DiaChi;
+  fetchData();
 });
 
 const totalSumPrice = computed(() => {
   if (cart.value.length > 0) {
     return cart.value.reduce((total, item) => {
-      return (total += item.SoLuong * item.bookDetail.Gia);
+      return (total += item.SoLuong * item.IdHangHoa.Gia);
     }, 0);
   } else {
     return 0;
   }
 });
 
-const handleDeleteBook = (data) => {
-  deleteItemCart(data._id);
+const handleDeleteBook = async (data) => {
+  const res = await Service.deleteItem_VO_HANG({
+    idCart: data._id,
+  });
+
+  fetchData();
 };
 
 // Xử lí current 0
@@ -49,8 +67,12 @@ const handleStepsFirst = async () => {
 
 // Xử lí current 1
 const handleStepsSecond = async () => {
+  // Update người dùng
+
+  // Đặt hàng
+
+  // Chuyển hướng
   currentStep.value = 2;
-  console.log("Order", cart.value);
 };
 
 // Xử lí current 2
@@ -58,27 +80,18 @@ const handleStepsThird = async () => {
   router.push("/history");
 };
 
-const updateNumberCartLocal = (id, number) => {
-  const cartData = JSON.parse(localStorage.getItem("cart"));
-  const productIdToChange = id;
-  const newQuantity = number; // Số lượng mới
-
-  const updatedCartData = cartData.map((item) => {
-    if (item._id === productIdToChange) {
-      // Cập nhật số lượng cho sản phẩm cần thay đổi
-      item.SoLuong = newQuantity;
-    }
-    return item;
+const handleUpdateNumbetApi = async (idCart, SoLuong) => {
+  const res = await Service.updateNumBer_VO_HANG({
+    idCart: idCart,
+    SoLuong: SoLuong,
   });
 
-  cart.value = updatedCartData;
-
-  localStorage.setItem("cart", JSON.stringify(updatedCartData));
+  fetchData();
 };
 
 // Thay đổi input number
 const handleUpdateNumber = (item, newQuantity) => {
-  updateNumberCartLocal(item._id, newQuantity);
+  handleUpdateNumbetApi(item._id, newQuantity);
 };
 </script>
 
@@ -116,14 +129,14 @@ const handleUpdateNumber = (item, newQuantity) => {
             >
               <div class="image-container">
                 <img
-                  :src="item?.bookDetail?.HinhHH"
+                  :src="item?.IdHangHoa?.HinhHH"
                   alt="notFound"
                   class="centered-image"
                 />
               </div>
-              <div class="nameWidth">{{ item?.bookDetail?.TenHH }}</div>
+              <div class="nameWidth">{{ item?.IdHangHoa?.TenHH }}</div>
               <div>
-                {{ item?.bookDetail?.Gia?.toLocaleString("vi-VN") || 0 }} đ
+                {{ item?.IdHangHoa?.Gia?.toLocaleString("vi-VN") || 0 }} đ
               </div>
               <div>
                 <a-input-number
@@ -138,7 +151,7 @@ const handleUpdateNumber = (item, newQuantity) => {
               <div>
                 Tổng :
                 {{
-                  (item?.bookDetail?.Gia * item?.SoLuong).toLocaleString(
+                  (item?.IdHangHoa?.Gia * item?.SoLuong).toLocaleString(
                     "vi-VN"
                   ) || 0
                 }}đ
@@ -188,14 +201,14 @@ const handleUpdateNumber = (item, newQuantity) => {
             >
               <div class="image-container">
                 <img
-                  :src="item?.bookDetail?.HinhHH"
+                  :src="item?.IdHangHoa?.HinhHH"
                   alt="notFound"
                   class="centered-image"
                 />
               </div>
-              <div class="nameWidth">{{ item?.bookDetail?.TenHH }}</div>
+              <div class="nameWidth">{{ item?.IdHangHoa?.TenHH }}</div>
               <div>
-                {{ item?.bookDetail?.Gia.toLocaleString("vi-VN") || 0 }} đ
+                {{ item?.IdHangHoa?.Gia.toLocaleString("vi-VN") || 0 }} đ
               </div>
               <div>
                 <a-input-number
@@ -207,7 +220,7 @@ const handleUpdateNumber = (item, newQuantity) => {
               </div>
               <div>
                 {{
-                  (item.bookDetail?.Gia * item.SoLuong).toLocaleString(
+                  (item.IdHangHoa?.Gia * item.SoLuong).toLocaleString(
                     "vi-VN"
                   ) || 0
                 }}đ
@@ -220,18 +233,26 @@ const handleUpdateNumber = (item, newQuantity) => {
                 <label for="" class="form-label">Email</label>
                 <input
                   disabled
-                  value="Phan Dai Cat"
+                  :value="profile.Email"
                   type="text"
                   class="form-control"
                 />
               </div>
               <div class="mb-3">
                 <label for="" class="form-label">Họ và tên</label>
-                <input type="text" class="form-control" />
+                <input
+                  v-model="profile.HoTen"
+                  type="text"
+                  class="form-control"
+                />
               </div>
               <div class="mb-3">
                 <label for="" class="form-label">Số điện thoại</label>
-                <input type="text" class="form-control" />
+                <input
+                  v-model="profile.SoDienThoai"
+                  type="text"
+                  class="form-control"
+                />
               </div>
               <div class="form-floating mb-3">
                 <textarea
