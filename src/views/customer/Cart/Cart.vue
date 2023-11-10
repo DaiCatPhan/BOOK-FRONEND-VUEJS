@@ -9,6 +9,8 @@ import Service from "../../../service/api";
 import getProfilePinia from "../../../components/getDatainPinia/getDatainPinia";
 
 import { authenticationStore } from "../../../stores/authenticationStore";
+import { message } from "ant-design-vue";
+import { toast } from "vue3-toastify";
 
 const authentication = authenticationStore();
 
@@ -18,6 +20,7 @@ const router = useRouter();
 const currentStep = ref(0);
 const cart = ref([]);
 
+const Email = ref("");
 const HoTen = ref("");
 const SoDienThoai = ref(0);
 const DiaChi = ref("");
@@ -34,11 +37,13 @@ const fetchData = async () => {
     console.log("error", error);
   }
 };
+
 watch(() => {
   profile.value = authentication.getUser();
-  HoTen.value  = profile.value.HoTen;
-  SoDienThoai.value  = profile.value.SoDienThoai;
-  DiaChi.value  = profile.value.DiaChi;
+  Email.value = profile.value.Email;
+  HoTen.value = profile.value.HoTen;
+  SoDienThoai.value = profile.value.SoDienThoai;
+
   fetchData();
 });
 
@@ -65,14 +70,73 @@ const handleStepsFirst = async () => {
   currentStep.value = 1;
 };
 
+const validate = (email, hoten, sodienthoai, diachi) => {
+  if (!email) {
+    toast.error("Thiếu Email !!!");
+    return false;
+  }
+  if (!hoten) {
+    toast.error("Thiếu hoten !!!");
+    return false;
+  }
+  if (!sodienthoai) {
+    toast.error("Thiếu sodienthoai !!!");
+    return false;
+  }
+  if (!diachi) {
+    toast.error("Thiếu Địa Chỉ !!!");
+    return false;
+  }
+  return true;
+};
+
 // Xử lí current 1
 const handleStepsSecond = async () => {
-  // Update người dùng
+  try {
+    const DataUpdateCustomer = {
+      IDCus: profile.value._id,
+      Email: Email.value,
+      HoTen: HoTen.value,
+      SoDienThoai: SoDienThoai.value,
+      DiaChi: DiaChi.value,
+    };
 
-  // Đặt hàng
+    const DataOrder = cart.value.map((item) => {
+      return {
+        MSHH: item.IdHangHoa._id,
+        SoLuong: item.SoLuong,
+        IDCart: item._id,
+        GiaDatHang: item.IdHangHoa.Gia,
+      };
+    });
 
-  // Chuyển hướng
-  currentStep.value = 2;
+    if (DataUpdateCustomer && DataOrder.length > 0) {
+      // Validate
+
+      const validateForm = validate(
+        DataUpdateCustomer.Email,
+        DataUpdateCustomer.HoTen,
+        DataUpdateCustomer.SoDienThoai,
+        DataUpdateCustomer.DiaChi
+      );
+      if (!validateForm) {
+        return;
+      }
+
+      const apiOrder = await Service.create_DAT_HANG({
+        DataUpdateCustomer,
+        DataOrder,
+      });
+
+      if (apiOrder && apiOrder.data.EC === 0) {
+        message.success("Đặt hàng thành công");
+        currentStep.value = 2;
+        fetchData();
+      }
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 
 // Xử lí current 2
@@ -116,7 +180,7 @@ const handleUpdateNumber = (item, newQuantity) => {
     </div>
 
     <div>
-      <div v-if="cart <= 0">
+      <div v-if="cart <= 0 && currentStep < 2">
         <a-empty />
       </div>
       <div v-else>
@@ -233,34 +297,26 @@ const handleUpdateNumber = (item, newQuantity) => {
                 <label for="" class="form-label">Email</label>
                 <input
                   disabled
-                  :value="profile.Email"
+                  v-model="Email"
                   type="text"
                   class="form-control"
                 />
               </div>
               <div class="mb-3">
                 <label for="" class="form-label">Họ và tên</label>
-                <input
-                  v-model="profile.HoTen"
-                  type="text"
-                  class="form-control"
-                />
+                <input v-model="HoTen" type="text" class="form-control" />
               </div>
               <div class="mb-3">
                 <label for="" class="form-label">Số điện thoại</label>
-                <input
-                  v-model="profile.SoDienThoai"
-                  type="text"
-                  class="form-control"
-                />
+                <input v-model="SoDienThoai" type="text" class="form-control" />
               </div>
               <div class="form-floating mb-3">
                 <textarea
-                  class="form-control"
-                  placeholder="Leave a comment here"
-                  id="floatingTextarea"
+                  rows="3"
+                  placeholder="Nhập đia chỉ giao hàng"
+                  v-model="DiaChi"
+                  class="w-100 rounded"
                 ></textarea>
-                <label for="floatingTextarea">Địa chỉ giao hàng</label>
               </div>
               <div class="mb-3">
                 <label checked class="form-label text-secondary"
@@ -291,7 +347,7 @@ const handleUpdateNumber = (item, newQuantity) => {
         </div>
 
         <div class="row m-5" style="min-height: 22vh" v-if="currentStep === 2">
-          <a-result title="Great, we have done all the operations!">
+          <a-result title="Chúc mừng bạn đã đặt hàng thành công ">
             <template #icon>
               <IconMoodSmileBeam
                 :style="{ height: '100px', width: '100px', color: 'blue' }"
