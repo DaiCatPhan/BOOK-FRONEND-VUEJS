@@ -123,10 +123,15 @@ const handleStepsSecond = async () => {
         return;
       }
 
+      console.log("DataUpdateCustomer", DataUpdateCustomer);
+      console.log("DataOrder", DataOrder);
+
       const apiOrder = await Service.create_DAT_HANG({
         DataUpdateCustomer,
         DataOrder,
       });
+
+      console.log("apiOrder", apiOrder);
 
       if (apiOrder && apiOrder.data.EC === 0) {
         message.success("Đặt hàng thành công");

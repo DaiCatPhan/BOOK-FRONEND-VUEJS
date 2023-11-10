@@ -1,88 +1,91 @@
 <script setup>
 import { IconBus, IconStar } from "@tabler/icons-vue";
+import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons-vue";
+
+import { onMounted, ref } from "vue";
+import Service from "../../../service/api";
 import CardBook from "../../../components/CardBook/CardBook.vue";
 import CardTypeBook from "../../../components/CardTypeBook/CardTypeBook.vue";
 
-const books = [
-  {
-    id: 1,
-    name: "Chiến tranh tiền tệ 1 Chiến tranh tiền tệ 1",
-    price: "30.00",
-    url: "https://bizweb.dktcdn.net/100/180/408/products/chien-tranh-tien-te-1-c0c72970-7152-44f1-b27f-10e698f2acff.jpg?v=1667607754867",
-  },
-  {
-    id: 2,
-    name: "Chiến tranh tiền tệ 2",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 3,
-    name: "Chiến tranh tiền tệ 4",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 4,
-    name: "Chiến tranh tiền tệ 5",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 4,
-    name: "Chiến tranh tiền tệ 5",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 4,
-    name: "Chiến tranh tiền tệ 5",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 4,
-    name: "Chiến tranh tiền tệ 5",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-  {
-    id: 4,
-    name: "Chiến tranh tiền tệ 5",
-    price: "30.00",
-    url: "https://salt.tikicdn.com/cache/w1200/ts/product/c2/3a/64/feedafb39c7bc93f49277bef45f618d4.jpg",
-  },
-];
+const books = ref([]);
+
+const fetchData = async () => {
+  const res = await Service.readPanigate_HANG_HOA(
+    "?sort=createdAt&page=1&limit=8"
+  );
+
+  if (res && res.data.EC === 0) {
+    books.value = res.data.DT.pagination;
+  }
+};
+onMounted(() => {
+  fetchData();
+});
 </script>
 
 <template>
   <div>
-    <section class="slideLogo ">
+    <section class="slideLogo">
       <div class="sectionFirst">
         <div class="row container m-auto">
           <div class="col-6 sectionFirst-sideLeft">
-            <h1>Buy Your <span class="red">Best</span></h1>
-            <h1>Books <span class="red">Here</span></h1>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-              ad accusamus molestias illo iusto iste maiores perspiciatis odit
-              ad accusamus molestias illo iusto iste maiores perspiciatis odit0
-            </p>
-            <button class="btn btn-dark text-white">Explore more</button>
+            <div class="py-5">
+              <h1>Buy Your <span class="red">Best</span></h1>
+              <h1>Books <span class="red">Here</span></h1>
+              <p class="my-4">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Assumenda ad accusamus molestias illo iusto iste maiores
+                perspiciatis odit ad accusamus molestias illo iusto iste maiores
+                perspiciatis odit0
+              </p>
+              <button class="btn btn-dark text-white">Explore more</button>
+            </div>
           </div>
           <div class="col sectionFirst-sideRight">
-            <div class=" ">
+            <div class="d-flex justify-content-around">
               <img
-                height="200"
-                width="200"
-                src="/images/booklogo.jpg"
+                height="180"
+                width="180"
+                src="images/logoHome/anh1.jpg"
                 alt="notFound"
+                class="rounded"
+              />
+              <img
+                height="180"
+                width="180"
+                src="images/logoHome/anh2.jpg"
+                alt="notFound"
+                class="rounded"
+              />
+            </div>
+            <div class="d-flex justify-content-around my-4">
+              <img
+                height="180"
+                width="180"
+                src="images/logoHome/anh3.jpg"
+                alt="notFound"
+                class="rounded"
+              />
+              <img
+                height="180"
+                width="180"
+                src="images/logoHome/anh4.jpg"
+                alt="notFound"
+                class="rounded"
               />
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    <div class="border bg_fbfcd4 text-center">
+      <img
+        src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/FahasaSaleThu3T1123_W1_LDP_BannerNCCDinhTi.jpg"
+        alt=""
+        class="w-75"
+      />
+    </div>
 
     <div class="container">
       <!--  -->
@@ -140,7 +143,7 @@ const books = [
 
       <!--  -->
       <section>
-        <div class="m-auto text-center border w-75 my-5">
+        <div class="m-auto text-center w-75 my-5">
           <div>
             <div>
               <h2>Popular <span class="red">Collections</span></h2>
@@ -161,6 +164,24 @@ const books = [
         </div>
       </section>
 
+      <!-- Slide -->
+      <a-carousel arrows>
+        <template #prevArrow>
+          <div class="custom-slick-arrow" style="left: 10px; z-index: 1">
+            <LeftCircleOutlined />
+          </div>
+        </template>
+        <template #nextArrow>
+          <div class="custom-slick-arrow" style="right: 10px">
+            <RightCircleOutlined />
+          </div>
+        </template>
+        <div><h3>1</h3></div>
+        <div><h3>2</h3></div>
+        <div><h3>3</h3></div>
+        <div><h3>4</h3></div>
+      </a-carousel>
+
       <!-- CARD BOOK -->
       <section>
         <div class="row my-5">
@@ -169,12 +190,14 @@ const books = [
             v-for="book in books"
             :key="book.id"
           >
-            <CardBook
-              class="m-auto"
-              :name="book.name"
-              :price="book.price"
-              :url="book.url"
-            />
+            <router-link :to="'/books/' + book._id">
+              <CardBook
+                class="m-auto"
+                :name="book.TenHH"
+                :price="book.Gia"
+                :url="book.HinhHH"
+              />
+            </router-link>
           </div>
         </div>
       </section>
@@ -201,7 +224,10 @@ const books = [
 
 
 
-<style setup>
+<style scope>
+.bg_fbfcd4 {
+  background-color: #fbfcd4;
+}
 .red {
   color: red;
 }
@@ -217,14 +243,43 @@ a {
 }
 
 .sectionFirst-sideLeft {
-  border: 1px solid red;
-  padding: 75px 40px;
+  padding: 0 40px;
 }
 
 .sectionFirst-sideRight {
-  border: 1px solid blue;
-  padding: 75px;
+  padding: 20px;
 }
 
 /*-------------------- CARD TYPE BOOK------------------ */
+
+/* For demo */
+.slick-slide {
+  text-align: center;
+  height: 160px;
+  line-height: 160px;
+  background: #364d79;
+  overflow: hidden;
+}
+
+.slick-arrow.custom-slick-arrow {
+  width: 25px;
+  height: 25px;
+  font-size: 25px;
+  color: #fff;
+  background-color: rgba(31, 45, 61, 0.11);
+  transition: ease all 0.3s;
+  opacity: 0.3;
+  z-index: 1;
+}
+.slick-arrow.custom-slick-arrow:before {
+  display: none;
+}
+.slick-arrow.custom-slick-arrow:hover {
+  color: #fff;
+  opacity: 0.5;
+}
+
+.slick-slide h3 {
+  color: #fff;
+}
 </style>

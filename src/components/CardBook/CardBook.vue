@@ -17,7 +17,7 @@ const value = ref(4);
   <div class="cardBook rounded">
     <div class="cardImage text-center">
       <img
-        :src="props.url"
+        :src="props?.url"
         alt="notFound"
         height="150"
         width="100"
@@ -26,9 +26,9 @@ const value = ref(4);
     </div>
     <div class="text-center border-top cardBody">
       <div class="text-ellipsis text-truncate overflow-hidden">
-        {{ props.name }}
+        {{ props?.name }}
       </div>
-      <div class="red">${{ props.price.toLocaleString("vi-VN") }} đ</div>
+      <div class="red">${{ props?.price?.toLocaleString("vi-VN") }} đ</div>
       <div class="d-flex justify-content-between w-75 m-auto">
         <a-rate :value="value" :style="{ 'font-size': '14px' }" />
       </div>

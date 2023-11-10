@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const dataSource = ref([
   {
@@ -41,6 +41,8 @@ const columns = ref([
     <div>
       <a-table :dataSource="dataSource" :columns="columns" />
     </div>
+
+    <div></div>
   </div>
 </template>
 
