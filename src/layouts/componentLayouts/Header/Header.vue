@@ -58,7 +58,7 @@ const closeModalRegister = () => {
         <img
           height="50"
           width="50"
-          src="/images/typebooks/economics.png"
+          src="/images/typebooks/love.png"
           alt=""
         />
       </a>

@@ -79,15 +79,61 @@ onMounted(() => {
       </div>
     </section>
 
-    <div class="border bg_fbfcd4 text-center">
-      <img
-        src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/FahasaSaleThu3T1123_W1_LDP_BannerNCCDinhTi.jpg"
-        alt=""
-        class="w-75"
-      />
-    </div>
+    <!--  -->
+    <section>
+      <div class="m-auto text-center w-75 my-5">
+        <div>
+          <div>
+            <h2>Popular <span class="red">Collections</span></h2>
+          </div>
+        </div>
+        <div>
+          <p class="my-4">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit
+            voluptatibus quisquam corrupti asperiores voluptates? Aspernatur
+            excepturi incidunt saepe porro expedita, perspiciatis vitae
+          </p>
+        </div>
+        <div class="d-flex justify-content-between w-50 m-auto">
+          <button class="btn btn-danger">Best Seller</button>
+          <button class="btn border bg-light">Featured</button>
+          <button class="btn border bg-light">Latest</button>
+        </div>
+      </div>
+    </section>
+
+    <!--  -->
+    <section>
+      <div>
+        <img
+          class="w-100"
+          src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/FahasaSaleThu3T1123_W1_LDP_BannerVoucher_1.jpg"
+          alt=""
+        />
+      </div>
+    </section>
 
     <div class="container">
+      <!-- CARD BOOK -->
+      <section>
+        <div class="row my-5">
+          <div
+            class="col-lg-3 col-md-4 col-sm-6 my-3"
+            v-for="book in books"
+            :key="book.id"
+          >
+            <router-link :to="'/books/' + book._id">
+              <CardBook
+                class="m-auto"
+                :name="book.TenHH"
+                :price="book.Gia"
+                :url="book.HinhHH"
+              />
+            </router-link>
+          </div>
+        </div>
+      </section>
+
       <!--  -->
       <section class="my-5">
         <div class="d-flex justify-content-between flex-wrap">
@@ -142,64 +188,185 @@ onMounted(() => {
       </section>
 
       <!--  -->
-      <section>
-        <div class="m-auto text-center w-75 my-5">
-          <div>
-            <div>
-              <h2>Popular <span class="red">Collections</span></h2>
-            </div>
-          </div>
-          <div>
-            <p class="my-4">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit
-              voluptatibus quisquam corrupti asperiores voluptates? Aspernatur
-              excepturi incidunt saepe porro expedita, perspiciatis vitae
-            </p>
-          </div>
-          <div class="d-flex justify-content-between w-50 m-auto">
-            <button class="btn btn-danger">Best Seller</button>
-            <button class="btn border bg-light">Featured</button>
-            <button class="btn border bg-light">Latest</button>
-          </div>
+      <section class="border">
+        <div class="w-100">
+          <img
+            src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/FahasaSaleThu3T1123_W1_LDP_BannerFlashSale_1200x450_1.jpg"
+            alt=""
+            class="w-100"
+          />
         </div>
       </section>
 
       <!-- Slide -->
-      <a-carousel arrows>
-        <template #prevArrow>
-          <div class="custom-slick-arrow" style="left: 10px; z-index: 1">
-            <LeftCircleOutlined />
-          </div>
-        </template>
-        <template #nextArrow>
-          <div class="custom-slick-arrow" style="right: 10px">
-            <RightCircleOutlined />
-          </div>
-        </template>
-        <div><h3>1</h3></div>
-        <div><h3>2</h3></div>
-        <div><h3>3</h3></div>
-        <div><h3>4</h3></div>
-      </a-carousel>
-
-      <!-- CARD BOOK -->
-      <section>
-        <div class="row my-5">
+      <section class="my-5 rounded">
+        <a-carousel
+          :autoplay="true"
+          :autoplaySpeed="2000"
+          arrows
+          infinite
+          class="carousel"
+        >
           <div
-            class="col-lg-3 col-md-4 col-sm-6 my-3"
-            v-for="book in books"
-            :key="book.id"
+            class="d-flex justify-content-around align-items-center bg-white border itemCarousel rounded"
           >
-            <router-link :to="'/books/' + book._id">
-              <CardBook
-                class="m-auto"
-                :name="book.TenHH"
-                :price="book.Gia"
-                :url="book.HinhHH"
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_46272.jpg"
+                alt="not Found"
               />
-            </router-link>
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935212341134_1.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/i/m/image_228553.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935212365918.jpg"
+                alt="not Found"
+              />
+            </div>
           </div>
-        </div>
+
+          <div
+            class="d-flex justify-content-around align-items-center bg-white border itemCarousel"
+          >
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935212358583_1.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935212360913.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/w/h/who---chuyen-ke-ve-danh-nhan-the-gioi-bill-gates---tb-2023.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244888423.jpg"
+                alt="not Found"
+              />
+            </div>
+          </div>
+
+          <div
+            class="d-flex justify-content-around align-items-center bg-white border itemCarousel"
+          >
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_18112.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_45918.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_28432.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/c/0/c04882e9c24e28adc2aba6b312bcc98b.jpg"
+                alt="not Found"
+              />
+            </div>
+          </div>
+
+          <div
+            class="d-flex justify-content-around align-items-center bg-white border itemCarousel"
+          >
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_18112.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935212348867.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/b/o/boxset-luoc-su-the-gioi-bang-tranh_17-cuon.jpg"
+                alt="not Found"
+              />
+            </div>
+
+            <div>
+              <img
+                height="150"
+                width="150"
+                src="https://cdn0.fahasa.com/media/catalog/product/b/i/bia1_thuong_1.jpg"
+                alt="not Found"
+              />
+            </div>
+          </div>
+        </a-carousel>
       </section>
 
       <!-- CARD TYPE BOOK -->
@@ -217,7 +384,13 @@ onMounted(() => {
         </div>
       </section>
 
-      <section></section>
+      <div class="border bg_fbfcd4 text-center">
+        <img
+          src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/FahasaSaleThu3T1123_W1_LDP_BannerNCCDinhTi.jpg"
+          alt=""
+          class="w-75"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -281,5 +454,10 @@ a {
 
 .slick-slide h3 {
   color: #fff;
+}
+
+.itemCarousel,
+.carousel {
+  height: 200px;
 }
 </style>
