@@ -20,9 +20,9 @@ const handleGetProfile = async () => {
     profile.value = authentication.getUser();
     isLogin.value = authentication.getStateLogin();
 
-    if (profile?.value?.Role !== "admin") {
-      router.push("/");
-    }
+    // if (profile?.value?.Role !== "admin") {
+    //   router.push("/");
+    // }
   } catch (error) {
     console.log("error", error);
   }

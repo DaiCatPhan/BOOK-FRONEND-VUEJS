@@ -47,6 +47,10 @@ const create_VO_HANG = async (rawData) => {
 const create_DAT_HANG = async (rawData) => {
   return axios.post(`/api/v1/order/create`, rawData);
 };
+
+const readPanigation_DAT_HANG = async (rawData) => {
+  return axios.get(`/api/v1/order/readPanigation${rawData}`);
+};
 // MODULE DAT_HANG_CHI_TIET
 // MODULE HANG_HOA
 // MODULE AUTHENTICATION
@@ -73,7 +77,7 @@ export default {
 
   // MODULE DAT_HANG
   create_DAT_HANG,
-
+  readPanigation_DAT_HANG,
   // MODULE VO_HANG
   readPanigation_VO_HANG,
   updateNumBer_VO_HANG,
