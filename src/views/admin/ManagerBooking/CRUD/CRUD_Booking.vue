@@ -1,9 +1,9 @@
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import Service from "../../../../service/api";
 import { IconTrash } from "@tabler/icons-vue";
 import { IconEdit } from "@tabler/icons-vue";
-import ModalUpdateOrder from '../components/ModalUpdateOrder/ModalUpdateOrder.vue'
+import ModalUpdateOrder from "../components/ModalUpdateOrder/ModalUpdateOrder.vue";
 
 const columns = [
   {
@@ -28,8 +28,8 @@ const columns = [
   },
   {
     title: "OrderDetail",
-    dataIndex: " ",
-    key: " ",
+    dataIndex: "OrderDetail",
+    key: "OrderDetail",
   },
   {
     title: "Action",
@@ -77,7 +77,7 @@ onMounted(() => {
   fetchData();
 });
 
-watch(
+watchEffect(
   [current, pageSize],
   () => {
     fetchData();
@@ -93,6 +93,9 @@ const handleUpdate = async (data) => {
 const closeModalUpdate = () => {
   isShowModalUpdate.value = false;
 };
+
+//
+const activeKey = ref(["1"]);
 </script>
 
 <template>
@@ -112,7 +115,6 @@ const closeModalUpdate = () => {
         @change="handleTableChange"
       >
         <template #bodyCell="{ column, record }">
-          <!-- Action -->
           <template v-if="column.key === 'action'">
             <div class="d-flex">
               <div class="poiter">
