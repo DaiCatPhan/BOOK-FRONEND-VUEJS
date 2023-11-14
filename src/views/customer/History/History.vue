@@ -140,7 +140,7 @@ const handleDeleteOrder = async (data) => {
             <div class="d-flex">
               <div v-for="item in record?.OrderDetail" :key="item._id">
                 <img
-                  :src="item.MSHH.HinhHH"
+                  :src="item?.MSHH?.HinhHH"
                   alt="notFound"
                   width="100"
                   height="100"
@@ -152,8 +152,8 @@ const handleDeleteOrder = async (data) => {
           <template v-if="column.key === 'Tổng tiền'">
             <div class="d-flex">
               {{
-                record?.OrderDetail.reduce((total, item) => {
-                  return (total += +item.SoLuong * +item.MSHH.Gia);
+                record?.OrderDetail?.reduce((total, item) => {
+                  return (total += +item?.SoLuong * +item?.MSHH?.Gia);
                 }, 0).toLocaleString("vi-VN") || 0
               }}
               đ
@@ -162,13 +162,13 @@ const handleDeleteOrder = async (data) => {
 
           <template v-if="column.key === 'NgayDH'">
             <div>
-              {{ record.NgayDH && moment(record?.NgayDH).format("DD/MM/YYYY") }}
+              {{ record?.NgayDH && moment(record?.NgayDH).format("DD/MM/YYYY") }}
             </div>
           </template>
 
           <template v-if="column.key === 'NgayGH'">
             <div>
-              {{ record.NgayGH && moment(record?.NgayGH).format("DD/MM/YYYY") }}
+              {{ record?.NgayGH && moment(record?.NgayGH).format("DD/MM/YYYY") }}
             </div>
           </template>
 
