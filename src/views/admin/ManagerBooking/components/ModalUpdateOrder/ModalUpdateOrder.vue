@@ -1,9 +1,12 @@
 <script setup>
 import { onMounted, ref, watchEffect } from "vue";
 import moment from "moment";
+import { toast } from "vue3-toastify";
+import Service from "../../../../../service/api";
 
 const props = defineProps({
   closeModalUpdate: Function,
+  fetchData: Function,
   isShowModalUpdate: Boolean,
   dataModalUpdate: Object,
 });
@@ -22,14 +25,47 @@ watchEffect(() => {
   Date_DH.value = props?.dataModalUpdate?.NgayDH;
 });
 
-const handleOk = () => {
+const validate = () => {
+  if (!_id.value) {
+    toast.error("Không có id !!! đơn hàng");
+    return false;
+  }
+
+  if (!TrangthaiHD.value) {
+    toast.error("Chưa cập nhật trạng thái đơn hàng !!!");
+    return false;
+  }
+
+  if (!Date_GH.value) {
+    toast.error("Chưa cập nhật ngày giao đơn hàng !!!");
+    return false;
+  }
+  return true;
+};
+
+const handleCancel = () => {
+  props.closeModalUpdate();
+};
+
+const handleOk = async () => {
+  const validateForm = validate();
+  if (!validateForm) {
+    return;
+  }
   const dataUpdate = {
-    id: _id.value,
-    TrangthaiHD: TrangthaiHD.value,
-    DateGH: Date_GH.value,
+    idOrder: _id.value,
+    TrangThaiHD: TrangthaiHD.value,
+    NgayGH: Date_GH.value,
   };
 
-  console.log("ok", dataUpdate);
+  const res = await Service.update_DAT_HANG(dataUpdate);
+  if (res && res.data.EC === 0) {
+    toast.success(res.data.EM);
+    props.fetchData();
+    handleCancel();
+  } else {
+    toast.error(res.data.EM);
+  }
 };
 
 const handleChange = (value) => {
@@ -56,15 +92,17 @@ const onChangeDate_GiaoHang = (data) => {
       :open="props.isShowModalUpdate"
       title="Cập nhật trạng thái đặt hàng "
       @ok="handleOk"
-      @cancel="closeModalUpdate"
+      @cancel="handleCancel"
       :style="{ top: '10px' }"
       :width="700"
     >
       <form>
         <div>
-          <div>ID đơn hàng : {{ _id }}</div>
-          <div>Email khác hàng : {{ Email }}</div>
-          <div>Ngày đặt hàng : {{ moment(Date_DH).format("DD/MM/YYYY") }}</div>
+          <div class="my-2">ID đơn hàng : {{ _id }}</div>
+          <div class="my-2">Email khác hàng : {{ Email }}</div>
+          <div class="my-2">
+            Ngày đặt hàng : {{ moment(Date_DH).format("DD/MM/YYYY") }}
+          </div>
         </div>
 
         <div class="d-flex justify-content-between">
@@ -87,7 +125,6 @@ const onChangeDate_GiaoHang = (data) => {
             <div>Chọn ngày dự kiến giao hàng giao hàng</div>
             <div>
               <a-date-picker
-                v-model="DateGH"
                 @change="onChangeDate_DuKien"
                 format="DD/MM/YYYY"
               />
@@ -98,7 +135,6 @@ const onChangeDate_GiaoHang = (data) => {
             <div>Ngày đã giao hàng</div>
             <div>
               <a-date-picker
-                v-model="DateGH"
                 @change="onChangeDate_GiaoHang"
                 format="DD/MM/YYYY"
               />
@@ -109,7 +145,6 @@ const onChangeDate_GiaoHang = (data) => {
             <div>Hủy giao hàng</div>
             <div>
               <a-date-picker
-                v-model="DateGH"
                 @change="onChangeDate_GiaoHang"
                 format="DD/MM/YYYY"
               />
