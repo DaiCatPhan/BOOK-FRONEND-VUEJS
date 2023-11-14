@@ -33,6 +33,16 @@ const handleChangeSelectType = (value) => {
   TheLoai.value = value;
 };
 
+// Price
+const handlePrice = (data) => {
+  Gia.value = data;
+};
+
+// Soluong
+const handleSoLuong = (data) => {
+  SoLuongHang.value = data;
+};
+
 // Goi API thanh cong xóa dữ liệu và đóng đi
 const handleClose = () => {
   TenHH.value = "";
@@ -98,13 +108,13 @@ const handleOk = async () => {
         <div class="mb-3 row">
           <div class="col-6">
             <label class="form-label">Giá </label>
-            <!-- <input v-model="Gia" type="text" class="form-control" /> -->
 
             <a-input-number
               class="w-100"
-              v-model:value="Gia"
+              :value="Gia"
+              @change="handlePrice"
               :formatter="
-                (value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                (value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
               "
               :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
             />
@@ -153,8 +163,11 @@ const handleOk = async () => {
             <label class="form-label">Tác giả</label>
             <input v-model="TacGia" type="text" class="form-control" />
             <label class="form-label">Số lượng sách</label>
-            <!-- <input v-model="SoLuongHang" type="text" class="form-control" /> -->
-            <InputNumber class="w-100" v-model:value="SoLuongHang" />
+            <InputNumber
+              class="w-100"
+              @change="handleSoLuong"
+              :value="SoLuongHang"
+            />
           </div>
         </div>
 

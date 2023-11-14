@@ -153,7 +153,7 @@ const handleRefetchIcon = () => {
                 :show-size-changer="true"
                 :pageSizeOptions="['5', '8', '10', '15']"
                 @change="onChangePagination"
-                @showSizeChange="handlePageSize"
+                @showSizeChange="handlePageSize" 
               />
             </div>
           </div>

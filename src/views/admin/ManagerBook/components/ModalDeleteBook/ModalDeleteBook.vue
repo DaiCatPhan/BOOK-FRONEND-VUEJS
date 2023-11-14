@@ -17,7 +17,6 @@ const confirmLoading = ref(false);
 
 // Goi API thanh cong xóa dữ liệu và đóng đi
 const handleClose = () => {
-  props.fetchData();
   props.closeModalDelete();
 };
 
@@ -32,6 +31,7 @@ const handleOk = async () => {
   if (res && res.data.EC === 0) {
     toast.success(res.data.EM);
     handleClose();
+    props.fetchData();
   } else {
     toast.error(res.data.EM);
   }

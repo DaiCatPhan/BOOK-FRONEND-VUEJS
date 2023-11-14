@@ -1,12 +1,14 @@
 
 
 <script setup>
-import { IconUserSquareRounded } from "@tabler/icons-vue";
+import { IconShoppingCart, IconUserSquareRounded } from "@tabler/icons-vue";
 import { ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 
 import Service from "../../../service/api";
+
+import Cart_Header from "../Cart_Header/Cart_Header.vue";
 
 import ModalLogin from "../ModalLogin/ModalLogin.vue";
 import ModalRegister from "../ModalRegister/ModalRegister.vue";
@@ -55,12 +57,7 @@ const closeModalRegister = () => {
   <nav class="navbar navbar-expand-lg navbar-light bg-primary">
     <div class="container text-white">
       <a class="navbar-brand text-white" href="/">
-        <img
-          height="50"
-          width="50"
-          src="/images/typebooks/love.png"
-          alt=""
-        />
+        <img height="50" width="50" src="/images/typebooks/love.png" alt="" />
       </a>
       <button
         class="navbar-toggler"
@@ -100,6 +97,8 @@ const closeModalRegister = () => {
           </li>
         </ul>
         <div class="d-flex">
+          <Cart_Header />
+
           <a-dropdown-button v-if="isLogin === true">
             {{ profile?.Email || "" }}
             <template #overlay>

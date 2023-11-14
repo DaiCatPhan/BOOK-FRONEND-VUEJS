@@ -80,7 +80,6 @@ const handleAddCart = async () => {
   const res = await Service.create_VO_HANG(Cart);
   if (res && res.data && res.data.EC === 0) {
     message.success("Thêm vỏ hàng thành công");
-    router.push("/order");
   } else {
     message.success(res.data.EM);
   }
@@ -146,11 +145,6 @@ const handleBuyBook = async () => {
               <div>
                 <button class="btn btn_addCart" @click="handleAddCart">
                   Thêm vào giỏ hàng
-                </button>
-              </div>
-              <div>
-                <button class="btn btn-danger mx-3" @click="handleBuyBook">
-                  Mua ngay
                 </button>
               </div>
             </div>

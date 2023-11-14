@@ -6,6 +6,7 @@ import { toast } from "vue3-toastify";
 
 const props = defineProps({
   closeModalUpdate: Function,
+  fetchData: Function,
   isShowModalUpdate: Boolean,
   dataModalUpdate: Object,
 });
@@ -51,7 +52,7 @@ const handleClose = () => {
 };
 
 // Xử lí submit FORM
-const handleOk = async () => {
+const handleOk = async () => { 
   try {
     const formData = new FormData();
     formData.append("idProduct", dataUpdate.value.idProduct);
@@ -68,6 +69,7 @@ const handleOk = async () => {
     confirmLoading.value = false;
     if (res && res.data && res.data.EC === 0) {
       toast.success("Cập nhật sách thành công");
+      props.fetchData();
       handleClose();
     } else {
       toast.error(res.data.EM);

@@ -59,7 +59,8 @@ const closeModalAdd = () => {
 
 // REFETCH DATA ICON
 const handleRefetch = async () => {
-  alert("handleRefetch");
+  current.value = 1;
+  pageSize.value = 5;
 };
 
 // TABLE
@@ -109,7 +110,7 @@ const handleTableChange = (data) => {
 
 const fetchData = async () => {
   const data = await Service.readPanigate_HANG_HOA(
-    `?page=${+current.value}&limit=${+pageSize.value}`
+    `?page=${+current.value}&limit=${+pageSize.value}&sort=createdAt`
   );
 
   if (data && data.data.EC === 0 && data.data.DT.pagination.length > 0) {
@@ -132,10 +133,7 @@ watch(
 
 <template>
   <div class="CRUD">
-    <div class="border d-flex justify-content-between">
-      <button @click="handleAddBook" class="btn btn-sm border border-primary">
-        Add
-      </button>
+    <div class="d-flex justify-content-between my-2">
       <div>
         <IconRotateClockwise
           @click="handleRefetch"
@@ -143,6 +141,10 @@ watch(
           :style="{ color: 'blue' }"
         />
       </div>
+
+      <button @click="handleAddBook" class="btn btn-sm border border-primary">
+        Add
+      </button>
     </div>
     <a-table
       :dataSource="listBook"
@@ -194,6 +196,7 @@ watch(
       :isShowModalUpdate="isShowModalUpdate"
       :closeModalUpdate="closeModalUpdate"
       :dataModalUpdate="dataModalUpdate"
+      :fetchData="fetchData"
     />
     <ModalDeleteBook
       :isShowModalDelete="isShowModalDelete"

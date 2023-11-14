@@ -55,6 +55,14 @@ const update_DAT_HANG = async (rawData) => {
 const readPanigation_DAT_HANG = async (rawData) => {
   return axios.get(`/api/v1/order/readPanigation${rawData}`);
 };
+
+const read_DAT_HANG = async (rawData) => {
+  return axios.get(`/api/v1/order/read?${rawData}`);
+};
+
+const delete_DAT_HANG = async (rawData) => {
+  return axios.delete(`/api/v1/order/delete`, { data: rawData });
+};
 // MODULE DAT_HANG_CHI_TIET
 // MODULE HANG_HOA
 // MODULE AUTHENTICATION
@@ -83,6 +91,8 @@ export default {
   create_DAT_HANG,
   readPanigation_DAT_HANG,
   update_DAT_HANG,
+  read_DAT_HANG,
+  delete_DAT_HANG,
 
   // MODULE VO_HANG
   readPanigation_VO_HANG,
