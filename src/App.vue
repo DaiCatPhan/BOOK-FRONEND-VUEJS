@@ -13,12 +13,11 @@ const authenticaiton = authenticationStore();
 
 const handleFetchProfilePinia = async () => {
   const res = await Service.fetchProflie_AUTHENTICATION();
+  authenticaiton.setLoading(false);
   console.log("fetchProfile", res);
   if (res && res.data.EC === 0) {
     authenticaiton.setUserAndLogin(res.data.DT);
     authenticaiton.setIsLogin(true);
-  } else {
-    router.push("/");
   }
 };
 

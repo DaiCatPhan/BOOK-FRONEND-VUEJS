@@ -10,27 +10,28 @@ const collapsed = ref(false);
 const selectedKeys = ref(["1"]);
 const router = useRouter();
 
-const authentication = authenticationStore();
-
-const profile = ref({});
-const isLogin = ref(false);
-
-const handleGetProfile = async () => {
-  try {
-    profile.value = authentication.getUser();
-    isLogin.value = authentication.getStateLogin();
-
-    // if (profile?.value?.Role !== "admin") {
-    //   router.push("/");
-    // }
-  } catch (error) {
-    console.log("error", error);
+const profileAdmin = ref({});
+watch(
+  () => authenticationStore().getLoading,
+  (loading) => {
+    const authen = authenticationStore();
+    const profile = authen.getUser();
+    if (loading != true && profile._Role !== "admin") {
+      router.push("/");
+    }
   }
-};
+);
 
-watch(async () => {
-  await handleGetProfile();
-});
+// onMounted(() => {
+//   const authentication = authenticationStore();
+//   if (
+//     authentication.getLoading() != true &&
+//     profile.Role !== "" &&
+//     profile.Role !== "admin"
+//   ) {
+//     router.push("/");
+//   }
+// });
 
 const handleLogout = async () => {
   const res = await Service.logout_AUTHENTICATION();
@@ -97,7 +98,7 @@ const handleLogout = async () => {
           <div></div>
           <div>
             <a-dropdown-button>
-              {{ profile?.Email }}
+              <!-- {{ profileAdmin?.Email }} -->
               <template #overlay>
                 <a-menu>
                   <a-menu-item key="1"> Hồ sơ của tôi </a-menu-item>
@@ -116,9 +117,7 @@ const handleLogout = async () => {
         </div>
       </a-layout-header>
       <a-layout-content style="margin: 0 16px">
-        <a-breadcrumb style="margin: 10px 0">
-           
-        </a-breadcrumb>
+        <a-breadcrumb style="margin: 10px 0"> </a-breadcrumb>
         <div
           :style="{ padding: '24px', background: '#fff', minHeight: '80vh' }"
         >

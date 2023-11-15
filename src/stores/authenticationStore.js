@@ -2,36 +2,53 @@ import { defineStore } from "pinia";
 
 export const authenticationStore = defineStore("authenticaiton", {
   state: () => ({
-    user: {
+    _user: {
       _id: "",
-      HoTen: "",
-      Email: "",
-      SoDienThoai: "",
-      Role: "",
+      _HoTen: "",
+      _Email: "",
+      _SoDienThoai: "",
+      _Role: "",
     },
-    isLogin: false,
+    _loading: true,
+    _isLogin: false,
   }),
+
+  getters: {
+    getUserData(state) {
+      return state._user;
+    },
+    getLoading(state) {
+      return state._loading;
+    },
+    getState(state) {
+      return state;
+    },
+  },
 
   actions: {
     getUser() {
-      return this.user;
+      return this._user;
     },
     getStateLogin() {
-      return this.isLogin;
+      return this._isLogin;
     },
     setIsLogin(state) {
-      this.isLogin = state;
+      this._isLogin = state;
+    },
+
+    setLoading(state) {
+      this._loading = state;
     },
 
     logout() {
-      this.user = {
+      this._user = {
         _id: "",
-        HoTen: "",
-        Email: "",
-        SoDienThoai: "",
-        Role: "",
+        _HoTen: "",
+        _Email: "",
+        _SoDienThoai: "",
+        _Role: "",
       };
-      this.isLogin = false;
+      this._isLogin = false;
     },
 
     setUserAndLogin(tokenData) {
@@ -39,14 +56,14 @@ export const authenticationStore = defineStore("authenticaiton", {
       const { Id, HoTen, SoDienThoai, Email, Role } = tokenData;
 
       // Set the user information in the store
-      this.user._id = Id;
-      this.user.HoTen = HoTen;
-      this.user.SoDienThoai = SoDienThoai;
-      this.user.Email = Email;
-      this.user.Role = Role;
+      this._user._id = Id;
+      this._user._HoTen = HoTen;
+      this._user._SoDienThoai = SoDienThoai;
+      this._user._Email = Email;
+      this._user._Role = Role;
 
       // Set isLogin to true to indicate that the user is logged in
-      this.isLogin = true;
+      this._isLogin = true;
     },
   },
 });
