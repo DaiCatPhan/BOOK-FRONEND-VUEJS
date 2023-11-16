@@ -100,7 +100,7 @@ const closeModalRegister = () => {
           <Cart_Header />
 
           <a-dropdown-button v-if="isLogin === true">
-            {{ profile?.Email || "" }}
+            {{ profile?._Email || "" }}
             <template #overlay>
               <a-menu>
                 <router-link to="/profile"

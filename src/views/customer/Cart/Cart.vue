@@ -40,9 +40,9 @@ const fetchData = async () => {
 
 watch(() => {
   profile.value = authentication.getUser();
-  Email.value = profile.value.Email;
-  HoTen.value = profile.value.HoTen;
-  SoDienThoai.value = profile.value.SoDienThoai;
+  Email.value = profile.value._Email;
+  HoTen.value = profile.value._HoTen;
+  SoDienThoai.value = profile.value._SoDienThoai;
 
   fetchData();
 });

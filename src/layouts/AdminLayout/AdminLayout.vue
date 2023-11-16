@@ -11,27 +11,20 @@ const selectedKeys = ref(["1"]);
 const router = useRouter();
 
 const profileAdmin = ref({});
+
 watch(
   () => authenticationStore().getLoading,
   (loading) => {
     const authen = authenticationStore();
     const profile = authen.getUser();
+    profileAdmin.value = authen.getUser();
+
+    profileAdmin.value = authen.getUser();
     if (loading != true && profile._Role !== "admin") {
       router.push("/");
     }
   }
 );
-
-// onMounted(() => {
-//   const authentication = authenticationStore();
-//   if (
-//     authentication.getLoading() != true &&
-//     profile.Role !== "" &&
-//     profile.Role !== "admin"
-//   ) {
-//     router.push("/");
-//   }
-// });
 
 const handleLogout = async () => {
   const res = await Service.logout_AUTHENTICATION();
@@ -98,7 +91,7 @@ const handleLogout = async () => {
           <div></div>
           <div>
             <a-dropdown-button>
-              <!-- {{ profileAdmin?.Email }} -->
+              {{ profileAdmin?._Email }}
               <template #overlay>
                 <a-menu>
                   <a-menu-item key="1"> Hồ sơ của tôi </a-menu-item>
