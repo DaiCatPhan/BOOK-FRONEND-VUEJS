@@ -12,13 +12,15 @@ const router = useRouter();
 
 const profileAdmin = ref({});
 
+onMounted(() => {
+  profileAdmin.value = authenticationStore().getUser();
+});
+
 watch(
   () => authenticationStore().getLoading,
   (loading) => {
     const authen = authenticationStore();
     const profile = authen.getUser();
-    profileAdmin.value = authen.getUser();
-
     profileAdmin.value = authen.getUser();
     if (loading != true && profile._Role !== "admin") {
       router.push("/");
@@ -31,6 +33,7 @@ const handleLogout = async () => {
   if (res && res.data.EC === 0) {
     router.push("/");
     toast.success(res.data.EM);
+    const authentication = authenticationStore();
     authentication.logout();
   } else {
     toast.success(res.data.EM);

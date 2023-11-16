@@ -44,7 +44,7 @@ watch(
     <router-link to="/order"
       ><IconShoppingCart style="color: yellow"
     /></router-link>
-    <div class="numberCart">{{ numberItem }}</div>
+    <!-- <div class="numberCart">{{ numberItem }}</div> -->
   </div>
 </template> 
 
