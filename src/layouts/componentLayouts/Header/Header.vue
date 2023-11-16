@@ -91,7 +91,7 @@ const closeModalRegister = () => {
             <router-link
               class="nav-link active text-white"
               aria-current="page"
-              to="/lienhe"
+              to="/company"
               >Công ty</router-link
             >
           </li>

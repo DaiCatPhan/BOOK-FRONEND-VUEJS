@@ -1,17 +1,18 @@
 <script setup>
-import { IconBus, IconStar } from "@tabler/icons-vue";
+import { Icon24Hours, IconBus, IconStar } from "@tabler/icons-vue";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons-vue";
 
 import { onMounted, ref } from "vue";
 import Service from "../../../service/api";
 import CardBook from "../../../components/CardBook/CardBook.vue";
-import CardTypeBook from "../../../components/CardTypeBook/CardTypeBook.vue";
+import { IconRecharging } from "@tabler/icons-vue";
+import { IconCash } from "@tabler/icons-vue";
 
 const books = ref([]);
 
 const fetchData = async () => {
   const res = await Service.readPanigate_HANG_HOA(
-    "?sort=createdAt&page=1&limit=8"
+    "?sort=createdAt&page=1&limit=16"
   );
 
   if (res && res.data.EC === 0) {
@@ -25,6 +26,7 @@ onMounted(() => {
 
 <template>
   <div>
+    <!--  -->
     <section class="slideLogo">
       <div class="sectionFirst">
         <div class="row container m-auto">
@@ -81,6 +83,47 @@ onMounted(() => {
 
     <!--  -->
     <section>
+      <div class="row border">
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <img
+            src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/Quatang_FahasaT3_840x320_SmallBanner_310x210.png"
+            alt="notFound"
+          />
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <img
+            src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/TrangThieuNhiT923_Banner_SmallBanner_310x210-22_1.png"
+            alt="notFound"
+          />
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <img
+            src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/20_11_mainbanner_Smallbanner_310x210.png"
+            alt="notFound"
+          />
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <img
+            src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/TopSanPhamT1023_Banner_SmallBanner_310x210.png"
+            alt="notFound"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!--  -->
+    <section>
+      <div class="row">
+        <img
+          class="w-100"
+          src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/Fahasa_saleT3_Tuan2_LDP_Banner_01.png"
+          alt=""
+        />
+      </div>
+    </section>
+
+    <!--  -->
+    <section>
       <div class="m-auto text-center w-75 my-5">
         <div>
           <div>
@@ -102,6 +145,27 @@ onMounted(() => {
       </div>
     </section>
 
+    <!-- BOOK -->
+
+    <section>
+      <div class="row my-5">
+        <div
+          class="col-lg-3 col-md-4 col-sm-6 my-3"
+          v-for="book in books.slice(0, 8)"
+          :key="book.id"
+        >
+          <router-link :to="'/books/' + book._id">
+            <CardBook
+              class="m-auto"
+              :name="book.TenHH"
+              :price="book.Gia"
+              :url="book.HinhHH"
+            />
+          </router-link>
+        </div>
+      </div>
+    </section>
+
     <!--  -->
     <section>
       <div>
@@ -119,7 +183,7 @@ onMounted(() => {
         <div class="row my-5">
           <div
             class="col-lg-3 col-md-4 col-sm-6 my-3"
-            v-for="book in books"
+            v-for="book in books.slice(8, 16)"
             :key="book.id"
           >
             <router-link :to="'/books/' + book._id">
@@ -138,50 +202,50 @@ onMounted(() => {
       <section class="my-5">
         <div class="d-flex justify-content-between flex-wrap">
           <div
-            class="d-flex align-items-center border p-3 justify-content-between rounded"
+            class="d-flex align-items-center p-3 justify-content-between rounded"
           >
             <div>
               <IconBus />
             </div>
             <div class="mx-3">
-              <div>Free Shipping</div>
-              <div>Free Shipping</div>
+              <div><b>Free Shipping</b></div>
+              <div>Order over $300</div>
             </div>
           </div>
 
           <div
-            class="d-flex align-items-center border p-3 justify-content-between rounded"
+            class="d-flex align-items-center p-3 justify-content-between rounded"
           >
             <div>
-              <IconBus />
+              <IconCash />
             </div>
             <div class="mx-3">
-              <div>Free Shipping</div>
-              <div>Free Shipping</div>
+              <div><b>Secure payment</b></div>
+              <div>100% secure payment</div>
             </div>
           </div>
 
           <div
-            class="d-flex align-items-center border p-3 justify-content-between rounded"
+            class="d-flex align-items-center p-3 justify-content-between rounded"
           >
             <div>
-              <IconBus />
+              <IconRecharging />
             </div>
             <div class="mx-3">
-              <div>Free Shipping</div>
-              <div>Free Shipping</div>
+              <div><b>Best Price</b></div>
+              <div>Low cost</div>
             </div>
           </div>
 
           <div
-            class="d-flex align-items-center border p-3 justify-content-between rounded"
+            class="d-flex align-items-center p-3 justify-content-between rounded"
           >
             <div>
-              <IconBus />
+              <Icon24Hours />
             </div>
             <div class="mx-3">
-              <div>Free Shipping</div>
-              <div>Free Shipping</div>
+              <div><b>Eazy return</b></div>
+              <div>Within 20 days returns</div>
             </div>
           </div>
         </div>
@@ -371,16 +435,92 @@ onMounted(() => {
 
       <!-- CARD TYPE BOOK -->
       <section>
-        <div class="row border my-5">
+        <div class="row my-5">
           <div class="col-lg-4">
-            <router-link to="/home"><CardTypeBook /></router-link>
+            <div class="cardBookType p-3">
+              <div>
+                <img
+                  src="images/typebooks/economics.png"
+                  alt="notFound"
+                  height="50"
+                  width="70"
+                />
+              </div>
+              <div class="my-2"><b>Photography</b></div>
+              <div>Lorem ipsum dolor</div>
+            </div>
           </div>
 
-          <div class="col-lg-4"><CardTypeBook /></div>
-          <div class="col-lg-4"><CardTypeBook /></div>
-          <div class="col-lg-4"><CardTypeBook /></div>
-          <div class="col-lg-4"><CardTypeBook /></div>
-          <div class="col-lg-4"><CardTypeBook /></div>
+          <div class="col-lg-4">
+            <div class="cardBookType p-3">
+              <div>
+                <img
+                  src="images/typebooks/burger.png"
+                  alt="notFound"
+                  height="50"
+                  width="70"
+                />
+              </div>
+              <div class="my-2"><b>Food and drink</b></div>
+              <div>Lorem ipsum dolor</div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="cardBookType p-3">
+              <div>
+                <img
+                  src="images/typebooks/medical-records.png"
+                  alt="notFound"
+                  height="50"
+                  width="70"
+                />
+              </div>
+              <div class="my-2"><b>Health</b></div>
+              <div>Lorem ipsum dolor</div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="cardBookType p-3">
+              <div>
+                <img
+                  src="images/typebooks/love.png"
+                  alt="notFound"
+                  height="50"
+                  width="70"
+                />
+              </div>
+              <div class="my-2"><b>Romantic</b></div>
+              <div>Lorem ipsum dolor</div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="cardBookType p-3">
+              <div>
+                <img
+                  src="images/typebooks/motivational-book.png"
+                  alt="notFound"
+                  height="50"
+                  width="70"
+                />
+              </div>
+              <div class="my-2"><b>Biography</b></div>
+              <div>Lorem ipsum dolor</div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="cardBookType p-3">
+              <div>
+                <img
+                  src="images/typebooks/history-book.png"
+                  alt="notFound"
+                  height="50"
+                  width="70"
+                />
+              </div>
+              <div class="my-2"><b>History</b></div>
+              <div>Lorem ipsum dolor</div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -392,8 +532,34 @@ onMounted(() => {
         />
       </div>
     </div>
+
+    <div>
+      <div class="row">
+        <div class="col-lg-4">
+          <img
+            class="w-100"
+            src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/Fahasa_saleT3_Tuan2_LDP_SKU_04.jpg"
+            alt=""
+          />
+        </div>
+        <div class="col-lg-4">
+          <img
+            class="w-100"
+            src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/Fahasa_saleT3_Tuan2_LDP_SKU_05.jpg"
+            alt=""
+          />
+        </div>
+        <div class="col-lg-4">
+          <img
+            class="w-100"
+            src="https://cdn0.fahasa.com/media/wysiwyg/Thang-11-2023/Fahasa_saleT3_Tuan2_LDP_SKU_06.jpg"
+            alt=""
+          />
+        </div>
+      </div>
+    </div>
   </div>
-</template>
+</template> 
 
 
 
@@ -459,5 +625,14 @@ a {
 .itemCarousel,
 .carousel {
   height: 200px;
+}
+
+.cardBookType {
+  border: 1px solid rgb(207, 201, 201);
+  min-width: 280px;
+  height: 150px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 10px;
 }
 </style>
