@@ -63,6 +63,10 @@ const read_DAT_HANG = async (rawData) => {
 const delete_DAT_HANG = async (rawData) => {
   return axios.delete(`/api/v1/order/delete`, { data: rawData });
 };
+
+const dashboard_DAT_HANG = async () => {
+  return axios.get(`/api/v1/order/dashboard`);
+};
 // MODULE DAT_HANG_CHI_TIET
 // MODULE HANG_HOA
 // MODULE AUTHENTICATION
@@ -93,6 +97,7 @@ export default {
   update_DAT_HANG,
   read_DAT_HANG,
   delete_DAT_HANG,
+  dashboard_DAT_HANG,
 
   // MODULE VO_HANG
   readPanigation_VO_HANG,

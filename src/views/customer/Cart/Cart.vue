@@ -123,9 +123,6 @@ const handleStepsSecond = async () => {
         return;
       }
 
-      console.log("DataUpdateCustomer", DataUpdateCustomer);
-      console.log("DataOrder", DataOrder);
-
       const apiOrder = await Service.create_DAT_HANG({
         DataUpdateCustomer,
         DataOrder,
@@ -137,6 +134,8 @@ const handleStepsSecond = async () => {
         message.success("Đặt hàng thành công");
         currentStep.value = 2;
         fetchData();
+      } else {
+        toast.error(apiOrder.data.EM);
       }
     }
   } catch (error) {

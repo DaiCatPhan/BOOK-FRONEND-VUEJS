@@ -22,9 +22,10 @@ const dataUpdate = ref({
   HinhHH: "",
   TheLoai: "",
 });
+const confirmLoading = ref(false);
+
 
 const imagePage = ref("");
-const confirmLoading = ref(false);
 
 watchEffect(() => {
   dataUpdate.value.idProduct = props.dataModalUpdate._id || "";

@@ -156,20 +156,7 @@ const handleBuyBook = async () => {
         <div class="description px-5">
           <h5>Mô tả sản phẩm</h5>
           <p>
-            Trong một mớ “vàng thau lẫn lộn” của những cuốn sách về chứng khoán,
-            có một cuốn sách kinh điển gây ảnh hưởng sâu sắc tới hàng triệu nhà
-            đầu tư trên thế giới đó chính là cuốn sách Điều Quan Trọng Nhất –
-            The Most Important Thing của Howard Marks. Cuốn sách này thực sự
-            được coi là một cuốn cẩm nang về đầu tư chứng khoán nói chung và đầu
-            tư giá trị (value investing) nói riêng. Howard Marks – Chủ tịch kiêm
-            đồng sáng lập của Quỹ đầu tư Oak Tree Capital, vốn dự định viết cuốn
-            sách này khi ông nghỉ hưu. Nhưng huyền thoại đầu tư Warren Buffett
-            ngưỡng mộ Howard Marks đến nỗi, ông đã đề nghị viết lời giới thiệu
-            cho cuốn sách này nếu Marks đồng ý xuất bản nó sớm hơn. Và kết quả
-            là, chúng ta đã có thêm một cuốn sách “hiếm có và cực kỳ hữu ích”
-            như lời Buffett. Với lối viết rõ ràng, mạch lạc và đầy tính thuyết
-            phục, Howard Marks đã trình bày toàn bộ những quan điểm của ông về
-            những điều ông coi là quan trọng nhất khi đầu tư chứng khoán như:
+            {{ bookDetail?.MoTaHH }}
           </p>
         </div>
       </div>

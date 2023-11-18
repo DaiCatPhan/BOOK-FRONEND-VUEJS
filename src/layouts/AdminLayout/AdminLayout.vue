@@ -84,7 +84,7 @@ const handleLogout = async () => {
           >
         </a-sub-menu>
         <a-menu-item key="6">
-          <span>File</span>
+          <span  @click="handleLogout">Log out</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -97,9 +97,6 @@ const handleLogout = async () => {
               {{ profileAdmin?._Email }}
               <template #overlay>
                 <a-menu>
-                  <a-menu-item key="1"> Hồ sơ của tôi </a-menu-item>
-                  <a-menu-item key="2"> Giỏ hàng của tôi </a-menu-item>
-                  <a-menu-item key="3"> Lịch sử mua hàng </a-menu-item>
                   <a-menu-item key="4" @click="handleLogout">
                     Log out
                   </a-menu-item>
