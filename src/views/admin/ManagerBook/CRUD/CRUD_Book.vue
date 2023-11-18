@@ -72,28 +72,28 @@ const columns = [
     key: "_id",
   },
   {
-    title: "ảnh",
+    title: "Ảnh",
     dataIndex: "HinhHH",
     key: "HinhHH",
   },
   {
-    title: "TenHH",
+    title: "Tên Sách",
     dataIndex: "TenHH",
     key: "TenHH",
   },
   {
-    title: "Gia",
+    title: "Giá ",
     dataIndex: "Gia",
     key: "Gia",
   },
   {
-    title: "TheLoai",
+    title: "Thể loại",
     dataIndex: "TheLoai",
     key: "TheLoai",
   },
 
   {
-    title: "Action",
+    title: "Thao tác",
     key: "action",
   },
 ];
@@ -110,7 +110,7 @@ const handleTableChange = (data) => {
 
 const fetchData = async () => {
   const data = await Service.readPanigate_HANG_HOA(
-    `?page=${+current.value}&limit=${+pageSize.value}&sort=createdAt`
+    `?page=${+current.value}&limit=${+pageSize.value}&sort=-createdAt`
   );
 
   if (data && data.data.EC === 0 && data.data.DT.pagination.length > 0) {

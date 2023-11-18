@@ -6,7 +6,7 @@ import { ref } from "vue";
 
 const props = defineProps({
   name: String,
-  price: String,
+  price: Number,
   url: String,
 });
 
@@ -28,7 +28,7 @@ const value = ref(4);
       <div class="text-ellipsis text-truncate overflow-hidden">
         {{ props?.name }}
       </div>
-      <div class="red">${{ props?.price?.toLocaleString("vi-VN") }} đ</div>
+      <div class="red">{{ props?.price?.toLocaleString("vi-VN") }} đ</div>
       <div class="d-flex justify-content-between w-75 m-auto">
         <a-rate :value="value" :style="{ 'font-size': '14px' }" />
       </div>

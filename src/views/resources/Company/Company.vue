@@ -4,10 +4,11 @@
       <div class="row">
         <div class="col-lg-4 ">
           <div class="  p-3">
-            <img
+            <!-- <img
               src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/logo.png"
               alt="notfound"
-            />
+            /> -->
+            <h2>Nhà sách PhanDaiCat</h2>
             <p class="my-3">
               Lầu 5, 387-389 Hai Bà Trưng Quận 3 TP HCMCông Ty Cổ Phần Phát Hành
               Sách TP HCM - FAHASA60 - 62 Lê Lợi, Quận 1, TP. HCM, Việt Nam
