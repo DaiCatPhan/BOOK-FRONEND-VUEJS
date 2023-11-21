@@ -7,6 +7,7 @@ import AdminLayout from "../layouts/AdminLayout/AdminLayout.vue";
 import CRUD_Book from "../views/admin/ManagerBook/CRUD/CRUD_Book.vue";
 import CRUD_Customer from "../views/admin/ManagerCustomer/CRUD/CRUD_Customer.vue";
 import CRUD_Booking from "../views/admin/ManagerBooking/CRUD/CRUD_Booking.vue";
+import Revenue from "../views/admin/ManagerRevenue/Revenue.vue";
 import HomeAdmin from "../views/admin/Home/Home.vue";
 import Dashboard from "../views/admin/Dashboard/Dashboard.vue";
 
@@ -56,6 +57,13 @@ const routes = [
   {
     path: "/admin-managerCustomer",
     component: CRUD_Customer,
+    meta: {
+      layout: AdminLayout,
+    },
+  },
+  {
+    path: "/admin-revenue",
+    component: Revenue,
     meta: {
       layout: AdminLayout,
     },

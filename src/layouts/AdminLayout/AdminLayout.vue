@@ -83,8 +83,18 @@ const handleLogout = async () => {
             <a-menu-item key="5.1">CRUD</a-menu-item></router-link
           >
         </a-sub-menu>
-        <a-menu-item key="6">
-          <span  @click="handleLogout">Log out</span>
+        <a-sub-menu key="6">
+          <template #title>
+            <span>
+              <span>Manger Revenue</span>
+            </span>
+          </template>
+          <router-link to="/admin-revenue">
+            <a-menu-item key="6.1"> REVENUE</a-menu-item></router-link
+          >
+        </a-sub-menu>
+        <a-menu-item key="7">
+          <span @click="handleLogout">Log out</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
