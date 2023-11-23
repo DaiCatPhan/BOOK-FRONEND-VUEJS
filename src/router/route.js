@@ -24,6 +24,8 @@ import Cart from "../views/customer/Cart/Cart.vue";
 import Profile from "../views/customer/Profile/Profile.vue";
 import History from "../views/customer/History/History.vue";
 
+import NotFound from "../views/resources/NotFound/NotFound.vue";
+
 const routes = [
   // ADMIN =======================================================
   {
@@ -135,6 +137,13 @@ const routes = [
   {
     path: "/",
     component: Home,
+    meta: {
+      layout: DefaultLayout,
+    },
+  },
+  {
+    path: "/:slug",
+    component: NotFound,
     meta: {
       layout: DefaultLayout,
     },
