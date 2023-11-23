@@ -99,7 +99,7 @@ const handleRefetchIcon = () => {
   <div>
     <div class="row min-vh-100 px-3">
       <div class="col-2 p-0">
-        <div class="border w-100 text-center py-3">
+        <div class="border-bottom w-100 text-center py-3">
           Bộ lọc tìm kiếm
           <span class="mx-2 poiter"
             ><IconRotateClockwise
@@ -129,7 +129,7 @@ const handleRefetchIcon = () => {
           </div>
 
           <div>
-            <div class="row border">
+            <div class="row  ">
               <div
                 class="col-lg-3 col-md-4 col-sm-6 my-3"
                 v-for="book in books"
